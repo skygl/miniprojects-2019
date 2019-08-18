@@ -1,0 +1,343 @@
+#globalContainer {
+	margin: 0 auto;
+	position: relative;
+	zoom: 1;
+}
+
+#content {
+	margin: 0;
+	outline: none;
+	padding: 0;
+	width: auto;
+}
+
+._li {
+	overflow: initial;
+}
+
+._53jh {
+	background-color: #3b5998;
+	background-image: linear-gradient(#4e69a2, #3b5998 50%);
+	border-bottom: 1px solid #133783;
+	min-height: 42px;
+	position: relative;
+	z-index: 1;
+}
+
+.logo_container {
+	margin-top: 5px;
+}
+
+.loggedout_menubar_container {
+	height: 82px;
+	min-width: 980px;
+}
+
+.clearfix {
+	zoom: 1;
+}
+
+.loggedout_menubar {
+	margin: 0 auto;
+	padding-top: 13px;
+	width: 980px;
+}
+
+.loggedout_menubar .fb_logo {
+	margin-top: 17px;
+}
+
+._ohe {
+	float: left;
+}
+
+._lfloat {
+	float: left;
+}
+
+.sp_nv0ywostZBX.sx_a203a1 {
+	width: 170px;
+	height: 34px;
+	background-position: 0 0;
+}
+
+.sp_nv0ywostZBX {
+	background-image: url(/images/logo/facebook-full-logo.png);
+	background-size: 170px 34px;
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	width: 16px;
+}
+
+.ohf {
+	float: right;
+}
+
+.rfloat {
+	float: right;
+}
+
+.menu_login_container .html7magic label {
+	color: #fff;
+	font-weight: normal;
+	padding-left: 1px;
+}
+
+i.img u {
+	clip: rect(1px, 1px, 1px, 1px);
+	height: 1px;
+	left: auto;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+.menu_login_container .html7magic {
+	padding-bottom: 4px;
+}
+
+.menu_login_container table tr td {
+	padding: 0 0 0 14px;
+}
+
+.inputtext {
+	padding-bottom: 4px;
+	margin-bottom: 5px;
+}
+
+.uiButtonConfirm {
+	background-color: #4267b2;
+	border-color: #29487d;
+}
+
+.uiButton {
+	border: 1px solid #ccd0d5;
+	border-radius: 2px;
+	cursor: pointer;
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 18px;
+	padding: 2px 6px;
+	text-align: center;
+	text-decoration: none;
+	text-shadow: none;
+	vertical-align: top;
+	white-space: nowrap;
+}
+
+.uiButton input {
+	background: none;
+	border: 0;
+	color: #4b4f56;
+	cursor: pointer;
+	display: inline-block;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 18px;
+	margin: 0;
+	padding: 0;
+	white-space: nowrap;
+}
+
+.uiButtonConfirm input {
+	color: #fff;
+}
+
+.uiContextualLayerParent {
+	position: relative;
+}
+
+.fb_content {
+	min-height: 640px;
+	padding-bottom: 20px;
+}
+
+.gradient {
+	min-width: 980px;
+	background: linear-gradient(white, #D3D8E8);
+}
+
+.gradient .gradientContent {
+	margin: 0 auto;
+	width: 980px;
+}
+
+._5iyy {
+	margin-right: 15px;
+	width: 565px;
+}
+
+._5iyx {
+	color: #0e385f;
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 29px;
+	margin-top: 40px;
+	width: 450px;
+	word-spacing: -1px;
+}
+
+._5iyz {
+	max-width: 400px;
+}
+
+.pvl {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+.mbs {
+	font-size: 36px;
+	margin-bottom: 5px;
+	font-weight: 600;
+}
+
+.fcb {
+	color: #333;
+}
+
+._521r {
+	color: #1d2129;
+	font-size: 19px;
+}
+
+.fwn {
+	font-weight: normal;
+}
+
+._58mf {
+	margin: 0 auto 0 auto;
+	padding-bottom: 30px;
+}
+
+.uiStickyPlaceholderInput {
+	background: white;
+	border-radius: 5px;
+	width: 399px;
+	display: inline-block;
+	position: relative;
+}
+
+.uiStickyPlaceholderInput .placeholder {
+	font-size: 18px;
+	padding: 8px 10px;
+	box-sizing: border-box;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	display: block;
+	color: #999;
+	cursor: text;
+	height: 100%;
+	left: 0;
+	position: absolute;
+	top: 0;
+	width: 100px;
+}
+
+.uiStickyPlaceholderInput input {
+	background-color: transparent;
+	position: relative;
+	border: 1px solid ##ccd0d5;
+	color: #1c1e21;
+	text-rendering: auto;
+	letter-spacing: normal;
+	word-spacing: normal;
+	text-transform: none;
+	text-indent: 0px;
+	text-shadow: none;
+	display: inline-block;
+	text-align: start;
+	cursor: text;
+	font: 400 13.3333px Arial;
+}
+
+.login_form_label_field {
+	padding-top: 4px;
+	height: 16px;
+}
+
+._58mf ._6o {
+	font-size: 19px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-weight: bold;
+	line-height: 126%;
+	min-width: 194px;
+	padding:7px 20px;
+	text-align: center;
+	background: linear-gradient(#67ae55, #578843);
+	background-color: #69a74e;
+	box-shadow: inset 0 1px 1px #a4e388;
+	border-color: #3b6e22 #3b6e22 #2c5115;
+	border:1px solid;
+	border-radius: 5px;
+	color: #fff;
+	cursor: pointer;
+	display: inline-block;
+	letter-spacing: 1px;
+	position: relative;
+	text-shadow: 0 1px 2px rgba(0,0,0,.5);
+}
+
+.form-control {
+	font-size: 18px;
+	color: #1c1e21;
+	padding: 8px 10px;
+	border-color: #bdc7d8;
+	border-radius: 5px;
+	margin: 0;
+	width: 377px;
+	background: white;
+	background-color: white;
+	position: relative;
+	border: 1px solid #ccd0d5;
+}
+
+a {
+	color: #385898;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+body, button, input, label, select, td, textarea {
+	font-size: 12px;
+}
+
+table {
+	border-collapse: separate;
+	border-spacing: 2px;
+}
+
+td {
+	font-size: 12px;
+	display: table-cell;
+	vertical-align: inherit;
+}
+
+i {
+	font: italic;
+}
+
+h1 {
+	font-size: 14px;
+	margin-top: 0px;
+}
+
+div {
+	display: block;
+}
+
+button {
+	margin:0;
+	font: 400 13.3333px Arial;
+	box-sizing: border-box;
+	align-items: flex-start;
+	text-indent: 0px;
+	text-transform: none;
+	word-spacing: normal;
+	text-rendering: auto;
+}
