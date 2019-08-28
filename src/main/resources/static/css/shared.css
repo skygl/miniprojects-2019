@@ -8,6 +8,10 @@ li {
     margin: 0;
 }
 
+#current-user-name {
+    cursor: pointer;
+}
+
 .good-active {
     color: #2caae1;
 }

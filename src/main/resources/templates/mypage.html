@@ -7,19 +7,14 @@
 </head>
 <body>
 <th:block layout:fragment="content">
-    <!-- feed container -->
     <div class="mypage-container container-fluid max-width-lg mx-auto" id="main-content">
-        <!-- 프로필 사진 및 배경 구역 feed-header -->
         <header class="mypage-header">
             <div class="background pointer">
-                <span class="username" style="color: black">박경철 (철시)</span>
+                <span class="username" th:text="${user.name}">박경철</span>
             </div>
-            <ul class="categories">
-                <li class="btn btn-default">정보</li>
-                <li class="btn btn-default">친구</li>
-                <li class="btn btn-default">사진</li>
-            </ul>
-            <div class="profile pointer" id="profile"><img src=" /images/default/liverpool.jpg" style="width: 100%; height: 80%"></div>
+            <div class="profile pointer" id="profile">
+                <input type="file" accept="image/*" name="profile">
+            </div>
         </header>
         <main class="mypage-body">
             <section class="left-side" id="details">

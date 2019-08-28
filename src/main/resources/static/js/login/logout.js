@@ -2,7 +2,7 @@ function logout() {
 	const logoutConfirm = confirm('로그아웃 하시겠습니까?')
 
 	if(logoutConfirm) {
-	    api.POST("logout")
+	    api.POST("/logout")
 	    .then(res => {
             if (res.ok) {
                 localStorage.removeItem('loginUserId');

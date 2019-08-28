@@ -10,7 +10,6 @@ const initLoad = async () => {
     await api.GET(POST_URL)
         .then(res => res.json())
         .then(postPage => {
-            console.log(postPage)
             totalPage = postPage.totalPages;
             postPage.content.forEach(post => {
                 posts.appendChild(createPostDOM(post))

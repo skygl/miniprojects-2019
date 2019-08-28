@@ -1,11 +1,31 @@
-/* feed-header */
-
 .mypage-header {
     height: 350px;
-    background-image: url('/images/default/default.jpg');
+    background-image: url('/images/default/chelsea.png');
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
+    background-position: center;
     color: #fff;
+    z-index: 5;
+}
+
+.mypage-header:before {
+    content: '배경 사진 업데이트';
+    position: relative;
+    top: 10px;
+    left: 10px;
+    display: inline-block;
+    padding: 10px;
+    border: 1px solid #c9c9c9;
+    background-color: #000;
+    color: #fff;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    opacity: 0;
+    cursor: pointer;
+}
+
+.mypage-header:hover:before {
+    opacity: 0.7;
+    transition: 0.5s opacity;
 }
 
 .background {
@@ -36,10 +56,33 @@
     height: 150px;
     border: 3px solid #fff;
     border-radius: 50%;
+    background-size: cover;
     left: 1rem;
-    bottom: 10rem;
+    bottom: 9rem;
     color: #fff;
-    z-index: 1;
+    z-index: 10;
+}
+
+.mypage-header .profile:before {
+    content: '사진 업데이트';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 144px;
+    height: 144px;
+    border-radius: 50%;
+    opacity: 0;
+    background-color: #000;
+    z-index: 10;
+}
+
+.mypage-header .profile:hover:before {
+    opacity: 0.5;
+    transition: 0.5s opacity;
+}
+
+.mypage-header .profile input[type="file"] {
+    display: none;
 }
 
 /* feed-body */
