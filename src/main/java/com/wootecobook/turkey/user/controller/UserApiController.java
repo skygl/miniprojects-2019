@@ -1,5 +1,6 @@
 package com.wootecobook.turkey.user.controller;
 
+import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.commons.resolver.LoginUser;
 import com.wootecobook.turkey.commons.resolver.UserSession;
 import com.wootecobook.turkey.user.service.UserDeleteService;
@@ -37,10 +38,11 @@ public class UserApiController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponse> create(@RequestBody UserRequest userRequest) {
-        UserResponse userResponse = userService.save(userRequest);
-        URI uri = linkTo(UserApiController.class).slash(userResponse.getId()).toUri();
-        return ResponseEntity.created(uri).body(userResponse);
+    public ResponseEntity<ErrorMessage> create(@RequestBody UserRequest userRequest) {
+        return ResponseEntity.badRequest().body(new ErrorMessage("회원 가입이 불가능합니다."));
+//        UserResponse userResponse = userService.save(userRequest);
+//        URI uri = linkTo(UserApiController.class).slash(userResponse.getId()).toUri();
+//        return ResponseEntity.created(uri).body(userResponse);
     }
 
     @GetMapping
