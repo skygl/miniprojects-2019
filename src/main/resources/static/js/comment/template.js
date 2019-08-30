@@ -25,7 +25,14 @@ const commentEditDeleteDropdown = `
 
 const commentTemplate = (comment) => `
     <li class="comment-item parent-comment" data-id="${comment.id}">
-        <img class="thumb-img img-circle" src="images/default/eastjun_profile.jpg" alt="">
+        <img class="thumb-img img-circle" src=
+        ${
+            (() => {
+                return (comment.userResponse.profile === undefined) || (comment.userResponse.profile === null) ?
+                    DEFAULT_PROFILE_IMAGE_URL : comment.userResponse.profile.path
+            })()
+        }
+         alt="">
         <div class="info">
             <div class="bg-lightgray border-radius-18 padding-10 max-width-100" >
                 <a href="" class="title text-bold inline-block text-link-color">${comment.userResponse.name}</a>
@@ -99,7 +106,14 @@ const childCommentEditDeleteDropdown = (comment) => `
 const childCommentTemplate = (comment) => `
     <li class="comment-item child-comment" data-id="${comment.id}">
         <input class = "parentId" type="hidden" value="${comment.parentId}"/>
-        <img class="thumb-img img-circle" src="images/default/eastjun_profile.jpg" alt="">
+        <img class="thumb-img img-circle" src=
+         ${
+             (() => {
+                 return (comment.userResponse.profile === undefined) || (comment.userResponse.profile === null) ?
+                     DEFAULT_PROFILE_IMAGE_URL : comment.userResponse.profile.path
+             })()
+         }
+         alt="">
         <div class="info">
             <div class="bg-lightgray border-radius-18 padding-10 width-75">
                 <a href="" class="title text-bold inline-block text-link-color">${comment.userResponse.name}</a>

@@ -15,8 +15,8 @@
             <th:block layout:fragment="content"/>
             <th:block layout:fragment="right-panel"/>
         </div>
-        <div class="fbFriendSidebar">
-            <div class="tab-info center-tabs ">
+        <div class="fbFriendSidebar show-friend-bar">
+            <div class="tab-info center-tabs">
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" data-toggle="tab" href="#tab-centered-1" role="tab">ALL</a>
@@ -36,6 +36,7 @@
                 </div>
             </div>
         </div>
+        <div id="friend-bar-btn"><i class="ti-user"></i></div>
     </div>
 </div>
 <th:block th:include="fragments/script"/>

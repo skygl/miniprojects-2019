@@ -29,7 +29,11 @@ const profileUpload = (event) => {
 
     formDataApi.PUT(UPLOAD_URL(userId), profileUploadRequest)
         .then(res => res.json())
-        .then(profile => renderProfile(profile.path))
+        .then(profile => {
+            renderProfile(profile)
+            localStorage.loginUserProfile = profile.path
+            setupNavBarUserProfile()
+        })
         .catch(error => console.error(error))
 
     const modalBackground = document.querySelector('.modal-backdrop')

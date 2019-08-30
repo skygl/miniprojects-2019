@@ -124,3 +124,32 @@ const friendBarModule = (function () {
         }
     }
 })()
+
+const friendBar = document.querySelector('.fbFriendSidebar')
+const friendBarToggleBtn = document.getElementById('friend-bar-btn')
+const FRIEND_BAR_SHOW_CLASS = 'show-friend-bar'
+const FRIEND_BAR_HIDE_CLASS = 'hide-friend-bar'
+
+friendBarToggleBtn.addEventListener('click', (event) => {
+    const friendBarClasses = friendBar.classList
+
+    if (friendBarClasses.contains(FRIEND_BAR_SHOW_CLASS)) {
+        friendBar.classList.add(FRIEND_BAR_HIDE_CLASS)
+        friendBar.classList.remove(FRIEND_BAR_SHOW_CLASS)
+    } else {
+        friendBar.classList.add(FRIEND_BAR_SHOW_CLASS)
+        friendBar.classList.remove(FRIEND_BAR_HIDE_CLASS)
+    }
+})
+
+window.addEventListener('resize', (event) => {
+    if (innerWidth < 1430 && friendBar.classList.contains(FRIEND_BAR_SHOW_CLASS)) {
+        friendBar.classList.add(FRIEND_BAR_HIDE_CLASS)
+        friendBar.classList.remove(FRIEND_BAR_SHOW_CLASS)
+    }
+
+    if (innerWidth > 1430 && friendBar.classList.contains(FRIEND_BAR_HIDE_CLASS)) {
+        friendBar.classList.add(FRIEND_BAR_SHOW_CLASS)
+        friendBar.classList.remove(FRIEND_BAR_HIDE_CLASS)
+    }
+})

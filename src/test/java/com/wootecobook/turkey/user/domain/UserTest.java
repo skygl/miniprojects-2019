@@ -41,6 +41,16 @@ class UserTest {
     }
 
     @Test
+    void 이메일_길이_초과() {
+        //when & then
+        assertThrows(IllegalArgumentException.class, () -> User.builder()
+                .email("a@a.aaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                .name(VALID_NAME)
+                .password(VALID_PASSWORD)
+                .build());
+    }
+
+    @Test
     void 유저_생성시_로그아웃_상태() {
         //given
         User user = User.builder()

@@ -5,9 +5,10 @@ function logout() {
 	    api.POST("/logout")
 	    .then(res => {
             if (res.ok) {
-                localStorage.removeItem('loginUserId');
-                localStorage.removeItem('loginUserName');
-                localStorage.removeItem('loginUserEmail');
+                localStorage.removeItem('loginUserId')
+                localStorage.removeItem('loginUserName')
+                localStorage.removeItem('loginUserEmail')
+                localStorage.removeItem('loginUserProfile')
                 alert('로그아웃 되었습니다.')
             } else {
                 throw res

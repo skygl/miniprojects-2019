@@ -53,6 +53,8 @@ const initLoad = async () => {
                 filesPreviewContainer.innerHTML = ''
                 fileForm.value = ''
                 writeArea.value = ''
+
+
             })
             .catch(error => {
                 error.json().then(errorMessage =>
@@ -230,6 +232,8 @@ const postOperateButton = (function () {
                     const commentsContainer = postCard.querySelector('.comment-list')
                     const page = event.target.dataset.id
 
+                    commentsContainer.addEventListener('keyup', updateComment)
+
                     if (page == null) {
                         commentsContainer.innerHTML = commentFormTemplate
                         commentsContainer.querySelector('.add-comment').addEventListener('keyup', postComment)
@@ -247,7 +251,6 @@ const postOperateButton = (function () {
                                 } else {
                                     div.innerHTML = childCommentTemplate(comment)
                                 }
-                                div.addEventListener('keyup', updateComment)
                                 commentsContainer.appendChild(div)
                             })
 

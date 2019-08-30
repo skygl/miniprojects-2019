@@ -30,7 +30,14 @@ const postTemplate = (post, loginUserId) => `
     <div class="feed-header">
         <ul class="list-unstyled list-info">
             <li>
-                <img class="thumb-img img-circle" src="/images/default/eastjun_profile.jpg" alt="">
+                <img class="thumb-img img-circle" src=
+                 ${
+                     (() => {
+                         return (post.author.profile === undefined) || (post.author.profile === null) ?
+                            DEFAULT_PROFILE_IMAGE_URL : post.author.profile.path
+                     })()
+                 }
+                 alt="">
                 <div class="info">
                     <a href="${MY_PAGE_URL(post.author.id)}" class="title no-pdd-vertical text-semibold inline-block">${post.author.name}</a>
                     ${

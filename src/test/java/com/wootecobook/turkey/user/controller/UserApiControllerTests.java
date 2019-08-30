@@ -13,6 +13,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import static com.wootecobook.turkey.user.domain.UserValidator.*;
+import static com.wootecobook.turkey.user.service.UserService.EMAIL_DUPLICATE_MESSAGE;
 import static com.wootecobook.turkey.user.service.exception.SignUpException.SIGN_UP_FAIL_MESSAGE;
 import static com.wootecobook.turkey.user.service.exception.UserMismatchException.USER_MISMATCH_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -82,7 +83,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .getResponseBody();
 
         //then
-        assertThat(errorMessage.getMessage()).contains(SIGN_UP_FAIL_MESSAGE);
+        assertThat(errorMessage.getMessage()).contains(SIGN_UP_FAIL_MESSAGE, EMAIL_DUPLICATE_MESSAGE);
     }
 
     @Test
@@ -109,6 +110,32 @@ class UserApiControllerTests extends BaseControllerTests {
 
         //then
         assertThat(errorMessage.getMessage()).contains(SIGN_UP_FAIL_MESSAGE, EMAIL_CONSTRAINT_MESSAGE);
+    }
+
+    @Test
+    void 유저_생성_이메일_길이_에러() {
+        //given
+        UserRequest userRequest = UserRequest.builder()
+                .email("a@a.aaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                .name(VALID_USER_NAME)
+                .password(VALID_USER_PASSWORD)
+                .build();
+
+        //when
+        ErrorMessage errorMessage = webTestClient.post()
+                .uri(USER_API_URI)
+                .contentType(MEDIA_TYPE)
+                .accept(MEDIA_TYPE)
+                .body(Mono.just(userRequest), UserRequest.class)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectHeader().contentType(MEDIA_TYPE)
+                .expectBody(ErrorMessage.class)
+                .returnResult()
+                .getResponseBody();
+
+        //then
+        assertThat(errorMessage.getMessage()).contains(SIGN_UP_FAIL_MESSAGE, EMAIL_LENGTH_CONSTRAINT_MESSAGE);
     }
 
     @Test

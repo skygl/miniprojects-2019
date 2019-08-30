@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     public static final String NOT_FOUND_MESSAGE = "유저를 찾을수 없습니다.";
+    public static final String EMAIL_DUPLICATE_MESSAGE = "중복된 이메일입니다.";
 
     private final UserRepository userRepository;
 
@@ -45,9 +46,16 @@ public class UserService {
 
     public User save(final UserRequest userRequest) {
         try {
+            checkEmailDuplicate(userRequest.getEmail());
             return userRepository.save(userRequest.toEntity());
         } catch (Exception e) {
             throw new SignUpException(e.getMessage());
+        }
+    }
+
+    private void checkEmailDuplicate(String email) {
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new IllegalArgumentException(EMAIL_DUPLICATE_MESSAGE);
         }
     }
 

@@ -1,17 +1,17 @@
 .fbFriendSidebar {
     background-clip: padding-box;
-    background-color: transparent;
-    border-left: 0.3px solid rgba(0, 0, 0, .4);
+    background-color: #f6f7fb;
+    border-left: 0.04rem solid rgba(0, 0, 0, .1);
     font-size: 12px;
     height: calc(100% - 42px);
     line-height: 16px;
     right: 0;
     bottom: 0;
-    width: 205px;
+    width: 200px;
     z-index: 300;
     position: fixed;
     overflow-y: scroll;
-    overflow: visible !important;
+    overflow-x: visible;
 }
 
 .dropleft > button > img {
@@ -62,4 +62,39 @@
     bottom: 1px;
     position: relative;
     vertical-align: middle;
+}
+
+#friend-bar-btn {
+    width: 50px;
+    height: 50px;
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    z-index: 1000;
+    border-radius: 50%;
+    background-color: #000080;
+    line-height: 50px;
+    text-align: center;
+    font-size: 16px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    cursor: pointer;
+}
+
+#friend-bar-btn i {
+    border: 1px solid #fff;
+    padding: 10px;
+    border-radius: 50%;
+    position: relative;
+    color: #fff;
+    top: 2px;
+}
+
+.hide-friend-bar {
+    right: -200px;
+    transition: right 1s;
+}
+
+.show-friend-bar {
+    right: 0px;
+    transition: right 1s;
 }

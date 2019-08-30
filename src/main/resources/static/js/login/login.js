@@ -18,6 +18,11 @@ function login() {
             localStorage.loginUserId = loginUser.id
             localStorage.loginUserName = loginUser.name
             localStorage.loginUserEmail = loginUser.email
+            if (loginUser.profile) {
+                localStorage.loginUserProfile = loginUser.profile.path
+            } else {
+                localStorage.removeItem('loginUserProfile')
+            }
             alert('로그인되었습니다.')
             window.location.href="/"
         })

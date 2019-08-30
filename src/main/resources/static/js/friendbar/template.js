@@ -6,12 +6,19 @@ const logoutMarkTemplate = `
 <span aria-label="현재 로그아웃 " style="background: rgb(255, 0, 0); border-radius: 50%; display: inline-block; height: 6px; margin-left: 4px; width: 6px;"></span>
 `
 
-
 const allUserTemplate = (user) =>
 `
 <div class="btn-group dropleft" data-id="${user.id}">
     <button type="button" class="list-group-item list-group-item-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <img class="img-circle width-25px" src="/images/default/eastjun_profile.jpg">
+        <img class="img-circle width-25px" src=
+        ${
+            (() => {
+                return (user.profile === undefined) || (user.profile === null) ?
+                  DEFAULT_PROFILE_IMAGE_URL : user.profile.path
+            })()
+        }
+        >
+
         ${user.name}
         ${
             (() => {
