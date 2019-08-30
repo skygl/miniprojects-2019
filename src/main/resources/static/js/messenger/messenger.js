@@ -1,6 +1,18 @@
 const roomId = document.getElementById('chatWindow').dataset.id;
 
+const initLoad = async () => {
+    await api.GET("/api/messenger/" + roomId)
+        .then(res => res.json())
+        .then(messages => {
+            messages.forEach(message => {
+                showMessage(message)
+            })
+        })
+        .catch(error => console.error(error))
+}
+
 document.addEventListener("DOMContentLoaded", function() {
+    initLoad();
     WebSocket.init();
 });
 

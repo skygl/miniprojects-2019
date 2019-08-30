@@ -53,4 +53,23 @@ class MessageServiceTest {
         assertThat(savedMessage.getSender().getId()).isEqualTo(sender.getId());
     }
 
+    @Test
+    void 메세지룸으로_메세지조회_테스트() {
+        //given
+        List<Message> messages = IntStream.rangeClosed(1, 5)
+                .mapToObj(i -> new Message(messengerRoom, sender, "message" + i))
+                .collect(Collectors.toList());
+        when(messageRepository.findByMessengerRoomId(1L)).thenReturn(messages);
+        //when
+        List<Message> savedMessages = messageService.findByMessengerRoomId(1L);
+        //then
+        assertThat(messages.size()).isEqualTo(savedMessages.size());
+        IntStream.rangeClosed(0, 4)
+                .forEach(i -> matchMessageAndResponse(messages.get(i), savedMessages.get(i)));
+    }
+
+    private void matchMessageAndResponse(Message message, Message savedMessage) {
+        assertThat(message.getContent()).isEqualTo(savedMessage.getContent());
+    }
+
 }

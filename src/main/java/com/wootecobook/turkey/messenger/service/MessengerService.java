@@ -13,7 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -74,4 +76,10 @@ public class MessengerService {
                 .orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_MESSAGE));
     }
 
+    @Transactional(readOnly = true)
+    public List<MessageResponse> findMessageResponsesByRoomId(Long roomId) {
+        return messageService.findByMessengerRoomId(roomId).stream()
+                .map(MessageResponse::from)
+                .collect(Collectors.toList());
+    }
 }
