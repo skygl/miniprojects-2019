@@ -37,6 +37,9 @@ dependencies {
     implementation 'org.projectlombok:lombok'
     implementation 'com.h2database:h2'
     implementation 'org.springframework.cloud:spring-cloud-starter-aws'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.webjars:sockjs-client:1.1.2'
+    implementation 'org.webjars:stomp-websocket:2.3.3'
 
     runtimeOnly 'net.rakugakibox.spring.boot:logback-access-spring-boot-starter:2.7.1'
     runtimeOnly 'org.springframework.boot:spring-boot-devtools'
