@@ -78,6 +78,13 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+
+    public List<UserResponse> findUserResponseOfFriendsById(final Long id) {
+        return userRepository.findFriendsByUserId(id).stream()
+                .map(UserResponse::from)
+                .collect(Collectors.toList());
+    }
+
     public boolean existsById(final Long id) {
         return userRepository.existsById(id);
     }

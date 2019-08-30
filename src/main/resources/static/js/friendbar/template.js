@@ -1,9 +1,27 @@
+const loginMarkTemplate = `
+<span aria-label="현재 로그인" style="background: rgb(66, 183, 42); border-radius: 50%; display: inline-block; height: 6px; margin-left: 4px; width: 6px;"></span>
+`
+
+const logoutMarkTemplate = `
+<span aria-label="현재 로그아웃 " style="background: rgb(255, 0, 0); border-radius: 50%; display: inline-block; height: 6px; margin-left: 4px; width: 6px;"></span>
+`
+
+
 const allUserTemplate = (user) =>
 `
 <div class="btn-group dropleft" data-id="${user.id}">
     <button type="button" class="list-group-item list-group-item-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <img class="img-circle width-25px" src="/images/default/eastjun_profile.jpg">
         ${user.name}
+        ${
+            (() => {
+                if (user.login) {
+                    return loginMarkTemplate
+                } else {
+                    return logoutMarkTemplate
+                }
+            })()
+        }
     </button>
     <div class="dropdown-menu dropdown-menu-left">
     	<button class="FriendAsk" aria-label="${user.name}님을 친구로 추가" type="button">
@@ -24,6 +42,15 @@ const friendTemplate = (friend) =>
     <button type="button" class="list-group-item list-group-item-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <img class="img-circle width-25px" src="/images/default/eastjun_profile.jpg">
         ${friend.relatedUserName}
+        ${
+            (() => {
+                if (friend.login) {
+                    return loginMarkTemplate
+                } else {
+                    return logoutMarkTemplate
+                }
+            })()
+        }
     </button>
     <div class="dropdown-menu dropdown-menu-left">
     	<button class="FriendRemove" aria-label="${friend.relatedUserName}님을 친구 삭제" type="button">

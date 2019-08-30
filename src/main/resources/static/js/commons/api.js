@@ -23,5 +23,10 @@ const formDataApi = {
         method: 'POST',
         enctype: "multipart/form-data",
         body: data
-    })
+    }),
+    PUT: (url, data) => fetch(url, {
+        method: 'PUT',
+        enctype: "multipart/form-data",
+        body: data
+    }),
 }

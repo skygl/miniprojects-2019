@@ -1,6 +1,5 @@
 package com.wootecobook.turkey.user.domain;
 
-import com.wootecobook.turkey.user.service.dto.IntroductionResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,23 +1,35 @@
-const USER_URI = `/api${location.pathname}`
+const MYPAGE_URI = `/api${location.pathname}/mypage`
 const INTRODUCTION_URI = `/api${location.pathname}/introduction`
 const DEFAULT_PERSON_IMAGE_URL = (number) => `/images/default/person${number}.jpg`
+const DEFAULT_COVER_IMAGE_URL = '/images/default/chelsea.png'
 
 const profile = document.getElementById('profile')
+const cover = document.getElementById('cover')
 const details = document.getElementById('details')
 const blockTypes = ['introduce', 'pictures', 'friends']
+
+const renderProfile = (uploadedProfile) => {
+    profile.style.backgroundImage = `url(${(uploadedProfile === undefined) || (uploadedProfile === null) ?
+        DEFAULT_PERSON_IMAGE_URL(generateRandomNumber(4)) : uploadedProfile.path})`
+}
+
+const renderCover = (uploadedCover) => {
+    cover.style.backgroundImage = `url(${(uploadedCover === undefined) || (uploadedCover === null) ?
+        DEFAULT_COVER_IMAGE_URL : uploadedCover.path})`
+}
 
 const feedInitLoad = async () => {
     const introduction = await api.GET(INTRODUCTION_URI)
         .then(res => res.json())
         .catch(error => console.error(error))
 
-    api.GET(USER_URI)
+    api.GET(MYPAGE_URI)
         .then(res => res.json())
-        .then(user => {
-            profile.style.backgroundImage = `url(${user.profile === undefined ?
-                DEFAULT_PERSON_IMAGE_URL(generateRandomNumber(4)) : user.profile})`
-            loadWriteForm(user)
-            return user
+        .then(dto => {
+            renderProfile(dto.user.profile)
+            renderCover(dto.cover)
+            loadWriteForm(dto.user)
+            return dto
         })
         .then(user => {
             blockTypes.forEach(type => {
@@ -29,7 +41,6 @@ const feedInitLoad = async () => {
                     if (localStorage.loginUserId == introduction.userId) {
                         block.appendChild(wrapperTemplate(updateForm))
                         block.appendChild(wrapperTemplate(updateIntroductionBtn))
-                        console.log($('#up'))
                         addUpdateListener()
                     }
                 } else {
@@ -38,9 +49,6 @@ const feedInitLoad = async () => {
             })
         })
         .catch(error => console.error(error))
-
-    const updateIntroductionRequest = serializeObject($('#up'))
-    console.log(updateIntroductionRequest)
 }
 
 const loadWriteForm = (receiver) => {
@@ -48,14 +56,13 @@ const loadWriteForm = (receiver) => {
     writeContainer.innerHTML = writeFormTemplate(receiver)
 }
 
-const generateRandomNumber = (bound) => Math.floor(Math.random() * bound) + 1
-
 const addUpdateListener = () => {
-    const item_map =
-        {'company' : '회사',
+    const item_map = {
+        'company' : '회사',
         'currentCity' : '거주지',
         'education' : '학교',
-        'hometown' : '출신지'}
+        'hometown' : '출신지'
+    }
 
     const update_btn = document.getElementById("introduction-update-btn")
     const display_btn = document.getElementById("introduction-display-btn")
@@ -64,9 +71,8 @@ const addUpdateListener = () => {
 
     update_btn.addEventListener('click', function(event) {
         api.GET(INTRODUCTION_URI)
-            .then(res=>res.json())
+            .then(res => res.json())
             .then(introduction => {
-                console.log(introduction)
                 document.getElementById("userId").value = introduction.userId
                 document.getElementById("education-input").value = checkNull(introduction.education)
                 document.getElementById("current-city-input").value = checkNull(introduction.currentCity)

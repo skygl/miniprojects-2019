@@ -8,12 +8,26 @@
 <body>
 <th:block layout:fragment="content">
     <div class="mypage-container container-fluid max-width-lg mx-auto" id="main-content">
-        <header class="mypage-header">
+        <header id="cover" class="mypage-header">
+            <button class="cover-modal-btn">
+                <i class="ti-camera"></i>배경 사진 업데이트
+            </button>
             <div class="background pointer">
                 <span class="username" th:text="${user.name}">박경철</span>
             </div>
             <div class="profile pointer" id="profile">
-                <input type="file" accept="image/*" name="profile">
+            </div>
+            <div id="profile-modal" class="custom-modal">
+                <div class="modal-body">
+                    <input accept="image/*" type="file" name="profile">
+                    <button>프로필 등록</button>
+                </div>
+            </div>
+            <div id="cover-modal" class="custom-modal">
+                <div class="modal-body">
+                    <input accept="image/*" type="file" name="cover">
+                    <button>커버사진 등록</button>
+                </div>
             </div>
         </header>
         <main class="mypage-body">
@@ -51,6 +65,7 @@
         <script src="/js/mypage/template-writeform.js"></script>
         <script src="/js/mypage/template.js"></script>
         <script src="/js/mypage/mypage.js"></script>
+        <script src="/js/mypage/profile-upload.js"></script>
         <script src="/js/post/template-file.js"></script>
         <script src="/js/post/template-carousel.js"></script>
         <script src="/js/post/template.js"></script>

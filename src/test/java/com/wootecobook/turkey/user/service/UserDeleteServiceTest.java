@@ -11,7 +11,6 @@ import com.wootecobook.turkey.user.domain.IntroductionRepository;
 import com.wootecobook.turkey.user.domain.User;
 import com.wootecobook.turkey.user.domain.UserRepository;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
-import com.wootecobook.turkey.user.service.dto.UserResponse;
 import com.wootecobook.turkey.user.service.exception.UserDeleteException;
 import com.wootecobook.turkey.user.service.exception.UserMismatchException;
 import org.junit.jupiter.api.BeforeEach;

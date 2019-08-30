@@ -15,7 +15,10 @@ import java.io.IOException;
 @Component
 public class S3Connector {
 
+    public static final String PROFILE_SAVE_DIRECTORY = "profile";
+    public static final String COVER_SAVE_DIRECTORY = "cover";
     private static final Logger log = LoggerFactory.getLogger(S3Connector.class);
+
     private final AmazonS3 amazonS3Client;
     private final String bucket;
 

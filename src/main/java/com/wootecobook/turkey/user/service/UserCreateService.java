@@ -1,8 +1,6 @@
 package com.wootecobook.turkey.user.service;
 
-import com.wootecobook.turkey.user.domain.IntroductionRepository;
 import com.wootecobook.turkey.user.domain.User;
-import com.wootecobook.turkey.user.domain.UserRepository;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
 import org.springframework.stereotype.Service;

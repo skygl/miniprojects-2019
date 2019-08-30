@@ -35,6 +35,7 @@ public class Comment extends UpdatableEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_comment_to_user"), nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User author;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,6 +45,7 @@ public class Comment extends UpdatableEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "fk_comment_to_comment"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Comment parent;
 
     @OneToMany(mappedBy = "parent")

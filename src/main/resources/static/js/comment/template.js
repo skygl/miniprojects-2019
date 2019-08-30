@@ -118,7 +118,7 @@ const childCommentTemplate = (comment) => `
             </div>
             ${
                 (() => {
-                    if (comment.userResponse.id === localStorage.loginUserId) {
+                    if (comment.userResponse.id == localStorage.loginUserId) {
                         return childCommentEditDeleteDropdown(comment)
                     } else {
                         return ""

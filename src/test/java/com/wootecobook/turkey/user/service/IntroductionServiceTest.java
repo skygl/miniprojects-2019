@@ -7,6 +7,7 @@ import com.wootecobook.turkey.user.domain.UserRepository;
 import com.wootecobook.turkey.user.service.dto.IntroductionRequest;
 import com.wootecobook.turkey.user.service.dto.IntroductionResponse;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
+import com.wootecobook.turkey.user.service.exception.UserMismatchException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import javax.persistence.EntityNotFoundException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
 class IntroductionServiceTest {
@@ -104,7 +106,7 @@ class IntroductionServiceTest {
                 .build();
 
         // when&then
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(UserMismatchException.class,
                 () -> introductionService.update(introductionRequest, null));
     }
 
@@ -120,7 +122,7 @@ class IntroductionServiceTest {
                 .build();
 
         // when&then
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(UserMismatchException.class,
                 () -> introductionService.update(introductionRequest, user.getId()));
     }
 
@@ -137,7 +139,7 @@ class IntroductionServiceTest {
                 .build();
 
         // when&then
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(UserMismatchException.class,
                 () -> introductionService.update(introductionRequest, user.getId()));
     }
 
@@ -147,6 +149,6 @@ class IntroductionServiceTest {
         introductionService.save(user.getId());
 
         // when&then
-        assertDoesNotThrow(() ->introductionService.delete(user.getId()));
+        assertDoesNotThrow(() -> introductionService.delete(user.getId()));
     }
 }

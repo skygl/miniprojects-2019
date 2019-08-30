@@ -2,9 +2,10 @@ package com.wootecobook.turkey.user.controller;
 
 import com.wootecobook.turkey.commons.resolver.LoginUser;
 import com.wootecobook.turkey.commons.resolver.UserSession;
-import com.wootecobook.turkey.user.service.UserCreateService;
-import com.wootecobook.turkey.user.service.UserDeleteService;
-import com.wootecobook.turkey.user.service.UserService;
+import com.wootecobook.turkey.file.domain.FileFeature;
+import com.wootecobook.turkey.user.service.*;
+import com.wootecobook.turkey.user.service.dto.MyPageResponse;
+import com.wootecobook.turkey.user.service.dto.UploadImage;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
 import org.springframework.data.domain.Page;
@@ -24,20 +25,32 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 @RequestMapping("/api/users")
 public class UserApiController {
 
+    private final MyPageService myPageService;
     private final UserService userService;
     private final UserCreateService userCreateService;
     private final UserDeleteService userDeleteService;
+    private final UserImageUploadService userImageUploadService;
 
-    public UserApiController(final UserService userService, final UserDeleteService userDeleteService,
-                             final UserCreateService userCreateService) {
+    public UserApiController(final MyPageService myPageService,
+                             final UserService userService,
+                             final UserCreateService userCreateService,
+                             final UserDeleteService userDeleteService,
+                             final UserImageUploadService userImageUploadService) {
+        this.myPageService = myPageService;
         this.userService = userService;
-        this.userDeleteService = userDeleteService;
         this.userCreateService = userCreateService;
+        this.userDeleteService = userDeleteService;
+        this.userImageUploadService = userImageUploadService;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> show(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findUserResponseById(id));
+    }
+
+    @GetMapping("/{id}/mypage")
+    public ResponseEntity<MyPageResponse> myPage(@PathVariable Long id) {
+        return ResponseEntity.ok(myPageService.findUserResponseById(id));
     }
 
     @PostMapping
@@ -67,4 +80,11 @@ public class UserApiController {
         return ResponseEntity.ok(userResponses);
     }
 
+    @PutMapping("/{id}/upload")
+    public ResponseEntity<FileFeature> uploadUserImage(@PathVariable Long id, UploadImage image,
+                                                       @LoginUser UserSession userSession) {
+        FileFeature fileFeature = userImageUploadService.uploadImage(image, id, userSession.getId());
+
+        return ResponseEntity.ok(fileFeature);
+    }
 }

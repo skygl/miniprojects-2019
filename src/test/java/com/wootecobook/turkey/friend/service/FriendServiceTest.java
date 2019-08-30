@@ -11,7 +11,6 @@ import com.wootecobook.turkey.user.domain.User;
 import com.wootecobook.turkey.user.domain.UserRepository;
 import com.wootecobook.turkey.user.service.UserService;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
-import com.wootecobook.turkey.user.service.dto.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

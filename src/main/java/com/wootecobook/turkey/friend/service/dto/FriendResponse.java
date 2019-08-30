@@ -13,12 +13,14 @@ public class FriendResponse {
     private Long friendId;
     private Long relatedUserId;
     private String relatedUserName;
+    private boolean isLogin;
 
     @Builder
-    private FriendResponse(Long friendId, Long relatedUserId, String relatedUserName) {
+    private FriendResponse(Long friendId, Long relatedUserId, String relatedUserName, boolean isLogin) {
         this.friendId = friendId;
         this.relatedUserId = relatedUserId;
         this.relatedUserName = relatedUserName;
+        this.isLogin = isLogin;
     }
 
     public static FriendResponse from(Friend friend, User relatedUser) {
@@ -26,6 +28,7 @@ public class FriendResponse {
                 .friendId(friend.getId())
                 .relatedUserId(relatedUser.getId())
                 .relatedUserName(relatedUser.getName())
+                .isLogin(relatedUser.isLogin())
                 .build();
     }
 }

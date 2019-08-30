@@ -3,6 +3,7 @@ package com.wootecobook.turkey.user.controller;
 import com.wootecobook.turkey.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.user.service.UserService;
+import com.wootecobook.turkey.user.service.dto.MyPageResponse;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
 import org.junit.jupiter.api.Test;
@@ -171,20 +172,20 @@ class UserApiControllerTests extends BaseControllerTests {
         Long id = addUser(name, email, VALID_USER_PASSWORD);
 
         //when
-        UserResponse userResponse = webTestClient.get()
-                .uri(USER_API_URI_WITH_SLASH + id)
+        MyPageResponse myPageResponse = webTestClient.get()
+                .uri(USER_API_URI + "/{userId}/mypage", id)
                 .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MEDIA_TYPE)
-                .expectBody(UserResponse.class)
+                .expectBody(MyPageResponse.class)
                 .returnResult()
                 .getResponseBody();
 
         //then
-        assertThat(userResponse.getId()).isEqualTo(id);
-        assertThat(userResponse.getEmail()).isEqualTo(email);
-        assertThat(userResponse.getName()).isEqualTo(name);
+        assertThat(myPageResponse.getUser().getId()).isEqualTo(id);
+        assertThat(myPageResponse.getUser().getEmail()).isEqualTo(email);
+        assertThat(myPageResponse.getUser().getName()).isEqualTo(name);
     }
 
     @Test

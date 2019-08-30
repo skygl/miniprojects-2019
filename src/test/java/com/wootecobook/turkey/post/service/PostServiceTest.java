@@ -41,16 +41,22 @@ public class PostServiceTest {
 
     @InjectMocks
     private PostService postService;
+
     @Mock
     private PostRepository postRepository;
+
     @Mock
     private PostGoodService postGoodService;
+
     @Mock
     private CommentRepository commentRepository;
+
     @Mock
     private UserService userService;
+
     @Mock
     private UploadFileService uploadFileService;
+
     private Contents defaultContents;
     private Post savedPost;
     private PostRequest postRequestWithoutFiles;

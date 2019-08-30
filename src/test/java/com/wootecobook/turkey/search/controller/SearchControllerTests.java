@@ -11,10 +11,9 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class SearchControllerTests extends BaseControllerTests {
 
+    private final String uri = linkTo(SearchController.class).toString();
     @Autowired
     private WebTestClient webTestClient;
-
-    private final String uri = linkTo(SearchController.class).toString();
 
     @Test
     void 검색_요청() {

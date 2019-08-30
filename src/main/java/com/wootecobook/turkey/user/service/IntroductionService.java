@@ -14,9 +14,9 @@ import javax.persistence.EntityNotFoundException;
 @Transactional
 public class IntroductionService {
 
-    private static final String NOT_FOUND_USER_MESSAGE = "유저를 찾을 수 없습니다.";
     public static final String NOT_FOUND_INTRODUCTION_MESSAGE = "소개를 찾을 수 없습니다.";
     public static final String MISMATCH_USER_MESSAGE = "본인의 소개만 수정할 수 있습니다.";
+    private static final String NOT_FOUND_USER_MESSAGE = "유저를 찾을 수 없습니다.";
     private static final String NULL_USER_MESSAGE = "사용자 ID가 Null입니다.";
 
     private final IntroductionRepository introductionRepository;

@@ -5,11 +5,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpSessionBindingListener;
 
 @Getter
 @ToString
 @NoArgsConstructor
-public class UserSession {
+public class UserSession implements HttpSessionBindingListener {
 
     public static final String USER_SESSION_KEY = "loginUser";
 
@@ -31,5 +35,4 @@ public class UserSession {
                 .name(user.getName())
                 .build();
     }
-
 }
