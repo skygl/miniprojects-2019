@@ -11,6 +11,7 @@ const friendBarModule = (function () {
                     createUserDOM(data[i])
                 }
                 addFriendsAskButtonClickListener()
+                addChatStartButtonClickListener()
             })
     }
 
@@ -69,6 +70,33 @@ const friendBarModule = (function () {
 		}
 	}
 
+    function addChatStartButtonClickListener() {
+        const userList = document.getElementById('all-user-list')
+        userList.addEventListener('click',  startMessenger)
+    }
+
+    function startMessenger(event) {
+        const startMessengerButton = event.target.closest('button')
+        if (startMessengerButton != null && startMessengerButton.classList.contains('start-messenger')) {
+            const ids = [startMessengerButton.closest('div.btn-group').dataset.id];
+            const messengerRequest = {"userIds" : ids}
+            api.POST("/api/messenger", messengerRequest)
+                .then(response => {
+                    if (!response.ok) {
+
+                        throw response;
+                    }
+                    return response.json();
+                })
+                .then(messengerRoom => {
+                    window.location.href = '/messenger/' + messengerRoom.id;
+                })
+                .catch(errorResponse =>
+                    console.log(errorResponse)
+                )
+        }
+    }
+
     function preventDropdownHide() {
         $('div.btn-group.dropleft').on('click', function (event) {
             let events = $._data(document, 'events') || {}
@@ -92,7 +120,7 @@ const friendBarModule = (function () {
         init: async function () {
             await loadAllUser()
             await loadFriends()
-            preventDropdownHide()
+            //preventDropdownHide() //Todo: 메신저 버튼 클릭이 안먹히는 문제 해결 필요
         }
     }
 })()
