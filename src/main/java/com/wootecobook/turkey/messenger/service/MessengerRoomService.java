@@ -16,18 +16,19 @@ public class MessengerRoomService {
     private final MessengerRoomRepository messengerRoomRepository;
     private final MessengerRoomCodeStrategy messengerRoomCodeStrategy;
 
-    public MessengerRoomService(MessengerRoomRepository messengerRoomRepository, MessengerRoomCodeStrategy plusJoinStrategy) {
+    public MessengerRoomService(final MessengerRoomRepository messengerRoomRepository,
+                                final MessengerRoomCodeStrategy plusJoinStrategy) {
         this.messengerRoomRepository = messengerRoomRepository;
         this.messengerRoomCodeStrategy = plusJoinStrategy;
     }
 
-    public MessengerRoom save(Set<Long> userIds) {
+    public MessengerRoom save(final Set<Long> userIds) {
         MessengerRoom messengerRoom = new MessengerRoom(messengerRoomCodeStrategy.createCode(userIds));
         return messengerRoomRepository.save(messengerRoom);
     }
 
     @Transactional(readOnly = true)
-    public Optional<MessengerRoom> findByUserIds(Set<Long> userIds) {
+    public Optional<MessengerRoom> findByUserIds(final Set<Long> userIds) {
         return messengerRoomRepository.findByCode(messengerRoomCodeStrategy.createCode(userIds));
     }
 

@@ -17,7 +17,7 @@ public class WebSocketMessengerController {
 
     private final MessengerService messengerService;
 
-    public WebSocketMessengerController(MessengerService messengerService) {
+    public WebSocketMessengerController(final MessengerService messengerService) {
         this.messengerService = messengerService;
     }
 

@@ -11,13 +11,14 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 public class MessengerRequest {
+
     private Set<Long> userIds = new HashSet<>();
 
-    public MessengerRequest(Set<Long> userIds) {
+    public MessengerRequest(final Set<Long> userIds) {
         this.userIds = userIds;
     }
 
-    public void add(Long userId) {
+    public void add(final Long userId) {
         userIds.add(userId);
     }
 }

@@ -15,7 +15,7 @@ public class MessengerController {
 
     private final MessengerService messengerService;
 
-    public MessengerController(MessengerService messengerService) {
+    public MessengerController(final MessengerService messengerService) {
         this.messengerService = messengerService;
     }
 

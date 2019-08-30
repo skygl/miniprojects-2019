@@ -23,7 +23,7 @@ public class Messenger extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Messenger(MessengerRoom messengerRoom, User user) {
+    public Messenger(final MessengerRoom messengerRoom, final User user) {
         this.messengerRoom = messengerRoom;
         this.user = user;
     }

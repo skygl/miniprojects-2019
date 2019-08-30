@@ -12,11 +12,11 @@ public class MessengerRoomResponse {
 
     private Long id;
 
-    public MessengerRoomResponse(Long id) {
+    public MessengerRoomResponse(final Long id) {
         this.id = id;
     }
 
-    public static MessengerRoomResponse from(MessengerRoom messengerRoom) {
+    public static MessengerRoomResponse from(final MessengerRoom messengerRoom) {
         return new MessengerRoomResponse(messengerRoom.getId());
     }
 }

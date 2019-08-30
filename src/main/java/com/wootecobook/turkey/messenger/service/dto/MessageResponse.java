@@ -10,15 +10,16 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class MessageResponse {
+
     private String content;
     private UserResponse sender;
 
-    private MessageResponse(String content, UserResponse sender) {
+    private MessageResponse(final String content, final UserResponse sender) {
         this.content = content;
         this.sender = sender;
     }
 
-    public static MessageResponse from(Message message) {
+    public static MessageResponse from(final Message message) {
         UserResponse sender = UserResponse.from(message.getSender());
         return new MessageResponse(message.getContent(), sender);
     }

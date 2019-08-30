@@ -23,7 +23,7 @@ public class MessengerRoom extends UpdatableEntity {
     @Column(nullable = false, unique = true)
     private String code;
 
-    public MessengerRoom(String code) {
+    public MessengerRoom(final String code) {
         if (code == null || code.isEmpty()) {
             throw new InvalidMessengerRoomException();
         }

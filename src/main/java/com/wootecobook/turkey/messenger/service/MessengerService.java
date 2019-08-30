@@ -28,15 +28,17 @@ public class MessengerService {
     private final UserService userService;
     private final MessageService messageService;
 
-    public MessengerService(MessengerRepository messengerRepository, MessengerRoomService messengerRoomService,
-                            MessageService messageService, UserService userService) {
+    public MessengerService(final MessengerRepository messengerRepository,
+                            final MessengerRoomService messengerRoomService,
+                            final MessageService messageService,
+                            final UserService userService) {
         this.messengerRepository = messengerRepository;
         this.messengerRoomService = messengerRoomService;
         this.userService = userService;
         this.messageService = messageService;
     }
 
-    public MessengerRoomResponse findMessengerRoom(MessengerRequest messengerRequest, Long userId) {
+    public MessengerRoomResponse findMessengerRoom(final MessengerRequest messengerRequest, final Long userId) {
         Set<Long> userIds = getMessengerUserIds(messengerRequest, userId);
 
         MessengerRoom messengerRoom = messengerRoomService.findByUserIds(userIds)
@@ -44,12 +46,12 @@ public class MessengerService {
         return MessengerRoomResponse.from(messengerRoom);
     }
 
-    private Set<Long> getMessengerUserIds(MessengerRequest messengerRequest, Long userId) {
+    private Set<Long> getMessengerUserIds(final MessengerRequest messengerRequest, final Long userId) {
         messengerRequest.add(userId);
         return Collections.unmodifiableSet(messengerRequest.getUserIds());
     }
 
-    private MessengerRoom createMessengerRoom(Set<Long> userIds) {
+    private MessengerRoom createMessengerRoom(final Set<Long> userIds) {
         MessengerRoom messengerRoom = messengerRoomService.save(userIds);
         userIds.stream()
                 .map(userService::findById)
@@ -59,27 +61,28 @@ public class MessengerService {
     }
 
     @Transactional(readOnly = true)
-    public void checkMember(Long roomId, Long userId) {
+    public void checkMember(final Long roomId, final Long userId) {
         if (messengerRepository.existsByUserIdAndMessengerRoomId(userId, roomId)) {
             return;
         }
         throw new AccessDeniedException();
     }
 
-    public MessageResponse sendMessage(Long roomId, Long userId, String message) {
+    public MessageResponse sendMessage(final Long roomId, final Long userId, final String message) {
         Messenger messenger = findMessenger(userId, roomId);
         return MessageResponse.from(messageService.save(messenger, message));
     }
 
-    private Messenger findMessenger(Long userId, Long messengerRoomId) {
+    private Messenger findMessenger(final Long userId, final Long messengerRoomId) {
         return messengerRepository.findByUserIdAndMessengerRoomId(userId, messengerRoomId)
                 .orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_MESSAGE));
     }
 
     @Transactional(readOnly = true)
-    public List<MessageResponse> findMessageResponsesByRoomId(Long roomId) {
+    public List<MessageResponse> findMessageResponsesByRoomId(final Long roomId) {
         return messageService.findByMessengerRoomId(roomId).stream()
                 .map(MessageResponse::from)
                 .collect(Collectors.toList());
     }
+
 }

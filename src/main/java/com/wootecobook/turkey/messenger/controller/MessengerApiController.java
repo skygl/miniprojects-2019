@@ -20,7 +20,7 @@ public class MessengerApiController {
 
     private final MessengerService messengerService;
 
-    public MessengerApiController(MessengerService messengerService) {
+    public MessengerApiController(final MessengerService messengerService) {
         this.messengerService = messengerService;
     }
 
@@ -33,8 +33,8 @@ public class MessengerApiController {
 
     @GetMapping("/{roomId}")
     @ResponseBody
-    public List<MessageResponse> list(@PathVariable Long roomId, @LoginUser UserSession userSession) {
+    public ResponseEntity<List<MessageResponse>> list(@PathVariable Long roomId, @LoginUser UserSession userSession) {
         messengerService.checkMember(roomId, userSession.getId());
-        return messengerService.findMessageResponsesByRoomId(roomId);
+        return ResponseEntity.ok(messengerService.findMessageResponsesByRoomId(roomId));
     }
 }

@@ -7,12 +7,12 @@ public class JoinStrategy implements MessengerRoomCodeStrategy {
 
     private final String delimiter;
 
-    public JoinStrategy(String delimiter) {
+    public JoinStrategy(final String delimiter) {
         this.delimiter = delimiter;
     }
 
     @Override
-    public String createCode(Set<Long> ids) {
+    public String createCode(final Set<Long> ids) {
         return ids.stream()
                 .sorted()
                 .map(String::valueOf)

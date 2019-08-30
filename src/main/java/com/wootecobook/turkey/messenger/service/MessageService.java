@@ -14,17 +14,17 @@ import java.util.List;
 public class MessageService {
     private final MessageRepository messageRepository;
 
-    public MessageService(MessageRepository messageRepository) {
+    public MessageService(final MessageRepository messageRepository) {
         this.messageRepository = messageRepository;
     }
 
-    public Message save(Messenger messenger, String messageContents) {
+    public Message save(final Messenger messenger, final String messageContents) {
         Message message = new Message(messenger.getMessengerRoom(), messenger.getUser(), messageContents);
         return messageRepository.save(message);
     }
 
     @Transactional(readOnly = true)
-    public List<Message> findByMessengerRoomId(Long roomId) {
+    public List<Message> findByMessengerRoomId(final Long roomId) {
         return Collections.unmodifiableList(messageRepository.findByMessengerRoomId(roomId));
     }
 }
