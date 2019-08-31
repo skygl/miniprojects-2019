@@ -10,16 +10,18 @@ const searchbox = function (event) {
         return
     }
 
-    api.GET(`/api/users/${keyword}/search`)
+    api.GET(`/api/search/${keyword}`)
         .then(res => res.json())
         .then(users => {
+            console.log(users)
             dropdownMenu.innerHTML = ''
             searchDropdown.classList.add('show')
 
             const items = document.createElement('div')
             items.id = 'dropdown-items'
 
-            users.content.forEach(user => {
+            users.forEach(user => {
+                console.log(user)
                 const aTag = getATag(`/users/${user.id}`, searchboxResultTemplate(user))
                 items.appendChild(aTag)
             })

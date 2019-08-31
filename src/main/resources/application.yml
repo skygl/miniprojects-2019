@@ -19,6 +19,11 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
 
+elasticsearch:
+  host: 127.0.0.1
+  port: 9200
+
+
 ---
 spring:
   profiles: dev
