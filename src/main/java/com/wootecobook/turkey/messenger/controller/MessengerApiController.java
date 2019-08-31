@@ -32,7 +32,6 @@ public class MessengerApiController {
     }
 
     @GetMapping("/{roomId}")
-    @ResponseBody
     public ResponseEntity<List<MessageResponse>> list(@PathVariable Long roomId, @LoginUser UserSession userSession) {
         messengerService.checkMember(roomId, userSession.getId());
         return ResponseEntity.ok(messengerService.findMessageResponsesByRoomId(roomId));

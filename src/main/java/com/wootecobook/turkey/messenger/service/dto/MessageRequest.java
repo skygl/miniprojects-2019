@@ -9,4 +9,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class MessageRequest {
     private String message;
+
+    public MessageRequest(String message) {
+        this.message = message;
+    }
 }
