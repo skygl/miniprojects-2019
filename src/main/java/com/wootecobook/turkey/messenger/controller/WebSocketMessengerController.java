@@ -29,7 +29,8 @@ public class WebSocketMessengerController {
     }
 
     private UserSession getLoginUser(SimpMessageHeaderAccessor messageHeaderAccessor) {
-        return (UserSession) ((HttpSession) messageHeaderAccessor.getSessionAttributes().get("session")).getAttribute("loginUser");
+        HttpSession httpSession = (HttpSession) messageHeaderAccessor.getSessionAttributes().get("session");
+        return (UserSession) httpSession.getAttribute("loginUser");
     }
 
 }
