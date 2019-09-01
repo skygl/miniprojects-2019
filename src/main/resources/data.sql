@@ -6,7 +6,11 @@ INSERT INTO user (email, name, password) VALUES ('a@a.ae', 'fdpudpu', '1234');
 INSERT INTO user (email, name, password) VALUES ('a@a.af', 'edpudpu', '1234');
 INSERT INTO user (email, name, password) VALUES ('a@a.ah', 'dpudpu', '1234');
 INSERT INTO user (email, name, password) VALUES ('ab@a.a', 'chulsea', '1234');
-INSERT INTO user (email, name, password) VALUES ('ac@a.a', 'olaf', '1234');
+INSERT INTO user (email, name, password) VALUES ('bd@a.b', '베디', '1234');
+INSERT INTO user (email, name, password) VALUES ('bd@a.c', '배대준', '1234');
+INSERT INTO user (email, name, password) VALUES ('bd@a.d', '베데준', '1234');
+INSERT INTO user (email, name, password) VALUES ('bd@a.e', '배데쥰', '1234');
+INSERT INTO user (email, name, password) VALUES ('bd@a.f', '밷대준', '1234');
 
 INSERT INTO post (contents, author_id, created_at, updated_at) VALUES ('contents', 1, '2019-01-31 23:59:59', '2019-08-12 23:59:59');
 INSERT INTO post (contents, author_id, created_at) VALUES ('contents', 1, '2019-01-31 23:59:59');

@@ -1,0 +1,20 @@
+{
+  "properties": {
+    "name": {
+      "type": "keyword",
+      "boost": 30
+    },
+    "nameJamo": {
+      "type": "text",
+      "analyzer": "jamo_index_analyzer",
+      "search_analyzer": "jamo_search_analyzer",
+      "boost": 10
+    },
+    "nameChosung": {
+      "type": "text",
+      "analyzer": "chosung_index_analyzer",
+      "search_analyzer": "chosung_search_analyzer",
+      "boost": 10
+    }
+  }
+}

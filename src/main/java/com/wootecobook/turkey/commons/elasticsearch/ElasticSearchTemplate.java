@@ -2,11 +2,17 @@ package com.wootecobook.turkey.commons.elasticsearch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.DocWriteResponse;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.indices.CreateIndexRequest;
+import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -15,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
+import java.util.List;
 
 @Repository
 public class ElasticSearchTemplate {
@@ -52,5 +59,38 @@ public class ElasticSearchTemplate {
             log.error(e.getMessage());
         }
         return searchHits;
+    }
+
+    public boolean deleteIndex(final String index) {
+        boolean result = false;
+        try {
+            final DeleteIndexRequest request = new DeleteIndexRequest(index);
+            final AcknowledgedResponse deleteIndexResponse = client.indices().delete(request, RequestOptions.DEFAULT);
+            result = deleteIndexResponse.isAcknowledged();
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+        return result;
+    }
+
+    public boolean createIndex(final CreateIndexRequest request) {
+        boolean result = false;
+        try {
+            final CreateIndexResponse createIndexResponse = client.indices().create(request, RequestOptions.DEFAULT);
+            result = createIndexResponse.isAcknowledged();
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+        return result;
+    }
+
+    public void bulk(final List<IndexRequest> indexRequests) {
+        try {
+            final BulkRequest request = new BulkRequest();
+            indexRequests.forEach(request::add);
+            final BulkResponse response = client.bulk(request, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -17,7 +17,7 @@ import java.util.Map;
 @Repository
 public class UserElasticSearchRepository {
 
-    private static final String INDEX_NAME = "user";
+    public static final String INDEX_NAME = "user";
 
     private final ElasticSearchTemplate elasticSearchTemplate;
 
