@@ -40,18 +40,18 @@ class WebSocketMessengerControllerTest extends BaseControllerTests {
 
     @LocalServerPort
     private String port;
-    private WebSocketStompClient stompClient;
-    private CompletableFuture<MessageResponse> completableFuture;
     private String userJSessionId;
     private Long userId;
     private Long roomId;
     private MessengerRequest messengerRequest;
     private MessageRequest messageRequest;
+    private WebSocketStompClient stompClient;
+    private CompletableFuture<MessageResponse> completableFuture;
 
     @BeforeEach
     void setUp() {
-        String userEmail = "u1@mail.com";
-        userId = addUser("name", userEmail, VALID_USER_PASSWORD);
+        String userEmail = "messenger@mail.com";
+        userId = userId == null ? addUser("name", userEmail, VALID_USER_PASSWORD) : userId;
         userJSessionId = logIn(userEmail, VALID_USER_PASSWORD);
 
         Long memberUserId = 1L;
@@ -73,7 +73,7 @@ class WebSocketMessengerControllerTest extends BaseControllerTests {
         stompSession.subscribe(SUBSCRIBE_MESSENGER_ENDPOINT + roomId, getStompFrameHandler());
         //when
         stompSession.send(SEND_MESSAGE_ENDPOINT + roomId, messageRequest);
-        MessageResponse messageResponse = completableFuture.get(20, SECONDS);
+        MessageResponse messageResponse = completableFuture.get(1, SECONDS);
         //then
         assertThat(messageResponse.getContent()).isEqualTo(messageRequest.getMessage());
         assertThat(messageResponse.getSender().getId()).isEqualTo(userId);
@@ -92,7 +92,7 @@ class WebSocketMessengerControllerTest extends BaseControllerTests {
 
         //when & then
         stompSession.send(SEND_MESSAGE_ENDPOINT + roomId, messageRequest);
-        assertThrows(TimeoutException.class, () -> completableFuture.get(20, SECONDS));
+        assertThrows(TimeoutException.class, () -> completableFuture.get(1, SECONDS));
     }
 
     private Long getMessengerRoomId() {
@@ -114,8 +114,7 @@ class WebSocketMessengerControllerTest extends BaseControllerTests {
 
     private StompSession getStompSession(WebSocketHttpHeaders headers) throws InterruptedException, java.util.concurrent.ExecutionException, TimeoutException {
         return stompClient
-                .connect("ws://localhost:" + port + "/websocket", headers, new StompSessionHandlerAdapter() {
-                })
+                .connect("ws://localhost:" + port + "/websocket", headers, new StompSessionHandlerAdapter() {})
                 .get(5, SECONDS);
     }
 
