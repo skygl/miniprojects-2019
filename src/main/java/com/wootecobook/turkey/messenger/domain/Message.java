@@ -16,7 +16,7 @@ public class Message extends BaseEntity {
     @JoinColumn(name = "messenger_room_id", nullable = false, foreignKey = @ForeignKey(name = "fk_message_to_messenger_room"), updatable = false)
     private MessengerRoom messengerRoom;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id", nullable = false, foreignKey = @ForeignKey(name = "fk_message_to_sender"), updatable = false)
     private User sender;
 
