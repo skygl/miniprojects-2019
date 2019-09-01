@@ -51,6 +51,16 @@ class UserTest {
     }
 
     @Test
+    void 비밀번호_길이_미만() {
+        //when & then
+        assertThrows(IllegalArgumentException.class, () -> User.builder()
+                .email(VALID_EMAIL)
+                .name(VALID_NAME)
+                .password("paSSw1!")
+                .build());
+    }
+
+    @Test
     void 유저_생성시_로그아웃_상태() {
         //given
         User user = User.builder()

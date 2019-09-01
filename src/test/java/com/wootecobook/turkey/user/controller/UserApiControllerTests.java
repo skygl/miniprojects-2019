@@ -139,6 +139,32 @@ class UserApiControllerTests extends BaseControllerTests {
     }
 
     @Test
+    void 유저_생성_비밀번호_길이_에러() {
+        //given
+        UserRequest userRequest = UserRequest.builder()
+                .email(VALID_USER_EMAIL)
+                .name(VALID_USER_NAME)
+                .password("passW1!")
+                .build();
+
+        //when
+        ErrorMessage errorMessage = webTestClient.post()
+                .uri(USER_API_URI)
+                .contentType(MEDIA_TYPE)
+                .accept(MEDIA_TYPE)
+                .body(Mono.just(userRequest), UserRequest.class)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectHeader().contentType(MEDIA_TYPE)
+                .expectBody(ErrorMessage.class)
+                .returnResult()
+                .getResponseBody();
+
+        //then
+        assertThat(errorMessage.getMessage()).contains(SIGN_UP_FAIL_MESSAGE, PASSWORD_LENGTH_CONSTRAINT_MESSAGE);
+    }
+
+    @Test
     void 유저_생성_이름_에러() {
         //given
         UserRequest userRequest = UserRequest.builder()
@@ -170,7 +196,7 @@ class UserApiControllerTests extends BaseControllerTests {
         UserRequest userRequest = UserRequest.builder()
                 .email(VALID_USER_EMAIL)
                 .name(VALID_USER_NAME)
-                .password("1")
+                .password("passWORD1")
                 .build();
 
         //when

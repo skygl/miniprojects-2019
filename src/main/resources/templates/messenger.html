@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/main}"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Turkeybook</title>
+    <th:block th:include="fragments/head"/>
+    <link href="/css/messenger.css" rel="stylesheet">
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="chat_window" id="chatWindow" th:data-id="${roomId}">
+        <div class="top_menu">
+            <div class="title">Chat</div>
+        </div>
+        <ul class="messages" id="messages"></ul>
+        <div class="bottom_wrapper clearfix">
+            <div class="message_input_wrapper"><input id="messageInput" class="message_input" placeholder="Type your message here..."/></div>
+            <div class="send_message" id="sendMessage">
+                <div class="icon"></div>
+                <div class="text">Send</div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block th:include="fragments/script"/>
+<th:block layout:fragment="custom-js">
+    <script src="/js/nav/setup.js"></script>
+    <script src="/webjars/sockjs-client/1.1.2/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/2.3.3/stomp.min.js"></script>
+    <script src="/js/messenger/template.js"></script>
+    <script src="/js/messenger/messenger.js"></script>
+    <script src="/js/commons/api.js"></script>
+    <script src="/js/login/logout.js"></script>
+    <script src="/js/friendbar/template.js"></script>
+    <script src="/js/friendbar/load.js"></script>
+    <script src="/js/friendask/template.js"></script>
+    <script src="/js/friendask/load.js"></script>
+    <script src="/js/search/searchbox.js"></script>
+    <script src="/js/search/template.js"></script>
+</th:block>
+</body>
+</html>
