@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +32,7 @@ public class InitElasticSearchIndex {
         this.objectMapper = objectMapper;
     }
 
-    public void init() throws FileNotFoundException {
+    public void init() {
         final String index = UserElasticSearchRepository.INDEX_NAME;
 
         deleteIndex(index);

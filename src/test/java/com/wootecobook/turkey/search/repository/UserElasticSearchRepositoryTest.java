@@ -30,7 +30,7 @@ class UserElasticSearchRepositoryTest {
         final DocWriteResponse.Result actual = DocWriteResponse.Result.CREATED;
 
         // when
-        final DocWriteResponse.Result expected = userElasticSearchRepository.save(userDocument, 1700L);
+        final DocWriteResponse.Result expected = userElasticSearchRepository.save(userDocument, 1600L);
 
         // then
         assertThat(actual).isEqualTo(expected);

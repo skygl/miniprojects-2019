@@ -26,7 +26,7 @@ public class UserElasticSearchService {
         final UserDocument userDocument = UserDocument.from(user);
         final DocWriteResponse.Result result = userElasticSearchRepository.save(userDocument, user.getId());
 
-        if (!result.equals(DocWriteResponse.Result.CREATED)) {
+        if (result.equals(DocWriteResponse.Result.NOOP)) {
             throw new SignUpException("elasticSearch 에 저장 실패");
         }
         return true;
