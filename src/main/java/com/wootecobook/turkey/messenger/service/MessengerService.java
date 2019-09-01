@@ -53,10 +53,11 @@ public class MessengerService {
 
     private MessengerRoom createMessengerRoom(final Set<Long> userIds) {
         MessengerRoom messengerRoom = messengerRoomService.save(userIds);
-        userIds.stream()
+        List<Messenger> messengers = userIds.stream()
                 .map(userService::findById)
                 .map(user -> new Messenger(messengerRoom, user))
-                .forEach(messengerRepository::save);
+                .collect(Collectors.toList());
+        messengerRepository.saveAll(messengers);
         return messengerRoom;
     }
 
