@@ -10,7 +10,7 @@ const searchbox = function (event) {
         return
     }
 
-    api.GET(`/api/users/${keyword}/search`)
+    api.GET(`/api/users/search?name=${keyword}`)
         .then(res => res.json())
         .then(users => {
             dropdownMenu.innerHTML = ''
@@ -34,7 +34,7 @@ const searchEnter = function (event) {
     const enter = 13;
     if (event.keyCode !== enter) return
 
-    location.href = `/search/${keyword}`
+    location.href = `/search?keyword=${keyword}`
 
 }
 

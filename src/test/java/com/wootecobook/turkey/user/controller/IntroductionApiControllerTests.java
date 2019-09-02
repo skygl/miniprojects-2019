@@ -7,8 +7,8 @@ import com.wootecobook.turkey.user.service.dto.IntroductionResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.PathParametersSnippet;
@@ -18,14 +18,14 @@ import reactor.core.publisher.Mono;
 import static com.wootecobook.turkey.user.service.IntroductionService.MISMATCH_USER_MESSAGE;
 import static com.wootecobook.turkey.user.service.IntroductionService.NOT_FOUND_INTRODUCTION_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
+import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration;
 
-
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class IntroductionApiControllerTests extends BaseControllerTests {
 
     private static final String INTRODUCTION_URI = "/api/users/{userId}/introduction";
@@ -33,6 +33,9 @@ class IntroductionApiControllerTests extends BaseControllerTests {
     private static final String CURRENT_CITY = "CURRENT_CITY";
     private static final String EDUCATION = "EDUCATION";
     private static final String COMPANY = "COMPANY";
+
+    @LocalServerPort
+    private String port;
 
     private final PathParametersSnippet userIdPathParametersSnippet = pathParameters(
             parameterWithName("userId").description("해당 소개 정보를 가지는 유저의 id")
@@ -47,13 +50,18 @@ class IntroductionApiControllerTests extends BaseControllerTests {
             fieldWithPath("userId").description("해당 유저의 고유 식별자")
     );
 
-    @Autowired
-    private WebTestClient webTestClient;
-
     private Long userId;
 
     @BeforeEach
-    void setUp() {
+    void setUp(RestDocumentationContextProvider restDocumentation) {
+        webTestClient = WebTestClient.bindToServer()
+                .baseUrl(DOMAIN + port)
+                .filter(documentationConfiguration(restDocumentation)
+                        .operationPreprocessors()
+                        .withRequestDefaults(prettyPrint())
+                        .withResponseDefaults(prettyPrint()))
+                .build();
+
         userId = addUser(VALID_USER_NAME, VALID_USER_EMAIL, VALID_USER_PASSWORD);
     }
 

@@ -12,25 +12,32 @@ import com.wootecobook.turkey.post.service.dto.PostResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.client.MultipartBodyBuilder;
+import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
+import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration;
 
 @Import(AwsMockConfig.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class CommentApiControllerTests extends BaseControllerTests {
 
     private static final String COMMENT_API_URI = "/api/posts/{postId}/comments";
+
+    @LocalServerPort
+    private String port;
+
     private Long userId;
     private Long postId;
     private Long commentId;
@@ -38,7 +45,15 @@ class CommentApiControllerTests extends BaseControllerTests {
     private String uri;
 
     @BeforeEach
-    void setUp() {
+    void setUp(RestDocumentationContextProvider restDocumentation) {
+        webTestClient = WebTestClient.bindToServer()
+                .baseUrl(DOMAIN + port)
+                .filter(documentationConfiguration(restDocumentation)
+                        .operationPreprocessors()
+                        .withRequestDefaults(prettyPrint())
+                        .withResponseDefaults(prettyPrint()))
+                .build();
+
         userId = addUser("name", VALID_USER_EMAIL, VALID_USER_PASSWORD);
         jSessionId = logIn(VALID_USER_EMAIL, VALID_USER_PASSWORD);
 

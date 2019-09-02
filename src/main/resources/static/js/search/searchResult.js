@@ -45,10 +45,9 @@ const searchResult = (function () {
             searchImages()
         }
 
-        //todo 전체, 사람인지에 따라서 다른 템플릿 제공
         const searchUsers = function (event, size = 10) {
             clearResultContainer()
-            api.GET(`/api/users/${keyword}/search?size=${size}`)
+            api.GET(`/api/users/search?name=${keyword}&size=${size}`)
                 .then(res => res.json())
                 .then(pageable => {
 

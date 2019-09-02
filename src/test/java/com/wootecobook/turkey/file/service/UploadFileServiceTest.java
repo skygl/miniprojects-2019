@@ -15,7 +15,7 @@ import static com.wootecobook.turkey.config.AwsMockConfig.S3MOCK_ENDPOINT;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 @Import(AwsMockConfig.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UploadFileServiceTest {
 
     private static final String DIRECTORY_NAME = "testDir";

@@ -11,22 +11,26 @@ import com.wootecobook.turkey.user.service.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 import static com.wootecobook.turkey.friend.service.FriendService.ALREADY_FRIEND_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
+import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class FriendApiControllerTests extends BaseControllerTests {
+
 
     private static final String FRIEND_ASK_API_URI = "/api/friends/asks";
     private static final String FRIEND_API_URI = "/api/friends";
@@ -36,6 +40,9 @@ class FriendApiControllerTests extends BaseControllerTests {
     private static final String RECEIVER_EMAIL = "receiver@abc.abc";
     private static final String MISMATCH_NAME = "mismatch";
     private static final String MISMATCH_EMAIL = "mismatch@abc.abc";
+
+    @LocalServerPort
+    private String port;
 
     private Long senderId;
     private Long receiverId;
@@ -59,13 +66,20 @@ class FriendApiControllerTests extends BaseControllerTests {
             fieldWithPath("login").description("친구의 접속 여부")
     };
 
-
-
     @BeforeEach
-    void setUp() {
+    void setUp(RestDocumentationContextProvider restDocumentation) {
+        webTestClient = WebTestClient.bindToServer()
+                .baseUrl(DOMAIN + port)
+                .filter(documentationConfiguration(restDocumentation)
+                        .operationPreprocessors()
+                        .withRequestDefaults(prettyPrint())
+                        .withResponseDefaults(prettyPrint()))
+                .build();
+
         senderId = addUser(SENDER_NAME, SENDER_EMAIL, VALID_USER_PASSWORD);
         receiverId = addUser(RECEIVER_NAME, RECEIVER_EMAIL, VALID_USER_PASSWORD);
     }
+
 
     @Test
     void 친구_요청_테스트() {
@@ -260,9 +274,10 @@ class FriendApiControllerTests extends BaseControllerTests {
                 .expectStatus().isOk()
                 .expectBodyList(FriendResponse.class)
                 .consumeWith(document("friend/200/read",
-                        responseFields(
+                        relaxedResponseFields(
                                 fieldWithPath("[]").description("친구 정보")).andWithPrefix("[].", friendResponseFields)
-                ))
+                        )
+                )
                 .returnResult()
                 .getResponseBody();
 

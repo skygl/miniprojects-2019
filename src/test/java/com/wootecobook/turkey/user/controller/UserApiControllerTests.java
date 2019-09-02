@@ -5,12 +5,15 @@ import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.user.service.UserService;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.PathParametersSnippet;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import static com.wootecobook.turkey.user.domain.UserValidator.*;
@@ -20,16 +23,20 @@ import static com.wootecobook.turkey.user.service.exception.UserMismatchExceptio
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
+import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class UserApiControllerTests extends BaseControllerTests {
 
     private static final String USER_API_URI = "/api/users";
     private static final String USER_API_URI_WITH_SLASH = USER_API_URI + "/";
+
+    @LocalServerPort
+    private String port;
 
     private final RequestFieldsSnippet userRequestFieldsSnippet = requestFields(
             fieldWithPath("email").description("회원의 이메일"),
@@ -48,6 +55,17 @@ class UserApiControllerTests extends BaseControllerTests {
     private final PathParametersSnippet userIdPathParametersSnippet = pathParameters(
             parameterWithName("id").description("유저의 고유 식별자")
     );
+
+    @BeforeEach
+    void setUp(RestDocumentationContextProvider restDocumentation) {
+        webTestClient = WebTestClient.bindToServer()
+                .baseUrl(DOMAIN + port)
+                .filter(documentationConfiguration(restDocumentation)
+                        .operationPreprocessors()
+                        .withRequestDefaults(prettyPrint())
+                        .withResponseDefaults(prettyPrint()))
+                .build();
+    }
 
     @Test
     void 유저_생성() {
@@ -383,16 +401,13 @@ class UserApiControllerTests extends BaseControllerTests {
 
         // when & then
         webTestClient.get()
-                .uri(USER_API_URI_WITH_SLASH  + "{name}/search", name)
+                .uri(USER_API_URI_WITH_SLASH  + "search?name={name}", name)
                 .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody()
-                .consumeWith(document("post/200/search",
-                        pathParameters(
-                                parameterWithName("name").description("검색 단어")
-                        ),
+                .consumeWith(document("post/search/200",
                         pageResponseSnippets.and(
                                 subsectionWithPath("pageable").description("페이지 정보"),
                                 subsectionWithPath("content").description("조회하고자 하는 해당 페이지의 Post 목록"),

@@ -5,23 +5,22 @@ import com.wootecobook.turkey.messenger.service.dto.MessengerRequest;
 import com.wootecobook.turkey.messenger.service.dto.MessengerRoomResponse;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration;
 
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class BaseControllerTests {
+    protected static final String DOMAIN = "http://localhost:";
     protected static final String JSESSIONID = "JSESSIONID";
     protected static final String VALID_USER_PASSWORD = "P@ssw0rd";
     protected static final String VALID_USER_EMAIL = "email@gmail.com";
@@ -48,17 +47,6 @@ public abstract class BaseControllerTests {
     protected final ResponseFieldsSnippet badRequestSnippets = responseFields(
             fieldWithPath("message").description("에러 메세지")
     );
-
-
-    @BeforeEach
-    void setUp(final RestDocumentationContextProvider restDocumentation) {
-        this.webTestClient = WebTestClient.bindToServer()
-                .filter(documentationConfiguration(restDocumentation)
-                        .operationPreprocessors()
-                        .withRequestDefaults(prettyPrint())
-                        .withResponseDefaults(prettyPrint()))
-                .build();
-    }
 
     protected Long addUser(String name, String email, String password) {
         UserRequest userRequest = UserRequest.builder()
