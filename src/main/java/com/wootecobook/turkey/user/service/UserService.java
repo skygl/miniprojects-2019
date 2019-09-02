@@ -86,7 +86,6 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-
     public List<UserResponse> findUserResponseOfFriendsById(final Long id) {
         return userRepository.findFriendsByUserId(id).stream()
                 .map(UserResponse::from)

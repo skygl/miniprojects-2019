@@ -3,12 +3,16 @@ package com.wootecobook.turkey.user.controller;
 import com.wootecobook.turkey.BaseControllerTests;
 import com.wootecobook.turkey.commons.ErrorMessage;
 import com.wootecobook.turkey.user.service.UserService;
-import com.wootecobook.turkey.user.service.dto.MyPageResponse;
 import com.wootecobook.turkey.user.service.dto.UserRequest;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.payload.RequestFieldsSnippet;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.PathParametersSnippet;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
@@ -17,15 +21,51 @@ import static com.wootecobook.turkey.user.service.UserService.EMAIL_DUPLICATE_ME
 import static com.wootecobook.turkey.user.service.exception.SignUpException.SIGN_UP_FAIL_MESSAGE;
 import static com.wootecobook.turkey.user.service.exception.UserMismatchException.USER_MISMATCH_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
+import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserApiControllerTests extends BaseControllerTests {
 
     private static final String USER_API_URI = "/api/users";
     private static final String USER_API_URI_WITH_SLASH = USER_API_URI + "/";
 
-    @Autowired
-    private WebTestClient webTestClient;
+    @LocalServerPort
+    private String port;
+
+    private final RequestFieldsSnippet userRequestFieldsSnippet = requestFields(
+            fieldWithPath("email").description("회원의 이메일"),
+            fieldWithPath("name").description("회원의 이름"),
+            fieldWithPath("password").description("회원의 비밀번호")
+    );
+
+    private final ResponseFieldsSnippet userResponseFieldsSnippet = responseFields(
+            fieldWithPath("id").description("유저의 고유 식별자"),
+            fieldWithPath("email").description("유저의 이메일"),
+            fieldWithPath("name").description("유저의 이름"),
+            fieldWithPath("login").description("현재 유저의 로그인 여부"),
+            subsectionWithPath("profile").type(JsonFieldType.OBJECT).optional().description("회원의 프로필 정보")
+    );
+
+    private final PathParametersSnippet userIdPathParametersSnippet = pathParameters(
+            parameterWithName("id").description("유저의 고유 식별자")
+    );
+
+    @BeforeEach
+    void setUp(RestDocumentationContextProvider restDocumentation) {
+        webTestClient = WebTestClient.bindToServer()
+                .baseUrl(DOMAIN + port)
+                .filter(documentationConfiguration(restDocumentation)
+                        .operationPreprocessors()
+                        .withRequestDefaults(prettyPrint())
+                        .withResponseDefaults(prettyPrint()))
+                .build();
+    }
 
     @Test
     void 유저_생성() {
@@ -47,6 +87,13 @@ class UserApiControllerTests extends BaseControllerTests {
                 .expectStatus().isCreated()
                 .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(UserResponse.class)
+                .consumeWith(document("user/201/create",
+                        userRequestFieldsSnippet,
+                        responseHeaders(
+                            headerWithName("Location").description("생성된 유저의 정보 접근 URI")
+                        ),
+                        userResponseFieldsSnippet
+                ))
                 .returnResult()
                 .getResponseBody();
 
@@ -79,6 +126,10 @@ class UserApiControllerTests extends BaseControllerTests {
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
+                .consumeWith(document("user/400/create/overlap",
+                        userRequestFieldsSnippet,
+                        badRequestSnippets
+                ))
                 .returnResult()
                 .getResponseBody();
 
@@ -105,6 +156,10 @@ class UserApiControllerTests extends BaseControllerTests {
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
+                .consumeWith(document("/user/400/create/email",
+                        userRequestFieldsSnippet,
+                        badRequestSnippets
+                ))
                 .returnResult()
                 .getResponseBody();
 
@@ -157,6 +212,10 @@ class UserApiControllerTests extends BaseControllerTests {
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
+                .consumeWith(document("/user/400/create/password",
+                        userRequestFieldsSnippet,
+                        badRequestSnippets
+                ))
                 .returnResult()
                 .getResponseBody();
 
@@ -183,6 +242,10 @@ class UserApiControllerTests extends BaseControllerTests {
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
+                .consumeWith(document("/user/400/create/name",
+                        userRequestFieldsSnippet,
+                        badRequestSnippets
+                ))
                 .returnResult()
                 .getResponseBody();
 
@@ -209,6 +272,10 @@ class UserApiControllerTests extends BaseControllerTests {
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
+                .consumeWith(document("/user/400/create/password",
+                        userRequestFieldsSnippet,
+                        badRequestSnippets
+                ))
                 .returnResult()
                 .getResponseBody();
 
@@ -225,20 +292,26 @@ class UserApiControllerTests extends BaseControllerTests {
         Long id = addUser(name, email, VALID_USER_PASSWORD);
 
         //when
-        MyPageResponse myPageResponse = webTestClient.get()
-                .uri(USER_API_URI + "/{userId}/mypage", id)
+        UserResponse userResponse = webTestClient.get()
+                .uri(USER_API_URI + "/{id}", id)
                 .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MEDIA_TYPE)
-                .expectBody(MyPageResponse.class)
+                .expectBody(UserResponse.class)
+                .consumeWith(document("/user/200/read",
+                        pathParameters(
+                                parameterWithName("id").description("유저의 고유 식별자")
+                        ),
+                        userResponseFieldsSnippet
+                ))
                 .returnResult()
                 .getResponseBody();
 
         //then
-        assertThat(myPageResponse.getUser().getId()).isEqualTo(id);
-        assertThat(myPageResponse.getUser().getEmail()).isEqualTo(email);
-        assertThat(myPageResponse.getUser().getName()).isEqualTo(name);
+        assertThat(userResponse.getId()).isEqualTo(id);
+        assertThat(userResponse.getEmail()).isEqualTo(email);
+        assertThat(userResponse.getName()).isEqualTo(name);
     }
 
     @Test
@@ -251,12 +324,16 @@ class UserApiControllerTests extends BaseControllerTests {
 
         //when
         ErrorMessage errorMessage = webTestClient.get()
-                .uri(USER_API_URI_WITH_SLASH + Long.MAX_VALUE)
+                .uri(USER_API_URI_WITH_SLASH + "{id}", Long.MAX_VALUE)
                 .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
+                .consumeWith(document("user/400/read/none",
+                        userIdPathParametersSnippet,
+                        badRequestSnippets
+                ))
                 .returnResult()
                 .getResponseBody();
 
@@ -273,13 +350,16 @@ class UserApiControllerTests extends BaseControllerTests {
 
         Long id = addUser(name, email, VALID_USER_PASSWORD);
 
-
         //when & then
         webTestClient.delete()
-                .uri(USER_API_URI_WITH_SLASH + id)
+                .uri(USER_API_URI_WITH_SLASH + "{id}", id)
                 .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
                 .exchange()
-                .expectStatus().isNoContent();
+                .expectStatus().isNoContent()
+                .expectBody()
+                .consumeWith(document("user/204/delete",
+                        userIdPathParametersSnippet
+                ));
     }
 
     @Test
@@ -292,12 +372,16 @@ class UserApiControllerTests extends BaseControllerTests {
 
         //when
         ErrorMessage errorMessage = webTestClient.delete()
-                .uri(USER_API_URI_WITH_SLASH + Long.MAX_VALUE)
+                .uri(USER_API_URI_WITH_SLASH + "{id}", Long.MAX_VALUE)
                 .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
+                .consumeWith(document("user/400/delete/none",
+                        userIdPathParametersSnippet,
+                        badRequestSnippets
+                ))
                 .returnResult()
                 .getResponseBody();
 
@@ -317,12 +401,19 @@ class UserApiControllerTests extends BaseControllerTests {
 
         // when & then
         webTestClient.get()
-                .uri(USER_API_URI_WITH_SLASH + name + "/search")
+                .uri(USER_API_URI_WITH_SLASH  + "search?name={name}", name)
                 .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody()
+                .consumeWith(document("post/search/200",
+                        pageResponseSnippets.and(
+                                subsectionWithPath("pageable").description("페이지 정보"),
+                                subsectionWithPath("content").description("조회하고자 하는 해당 페이지의 Post 목록"),
+                                subsectionWithPath("sort").description("조회 정렬 정보")
+                        )
+                ))
                 .jsonPath("$.totalElements").isEqualTo(3);
     }
 }

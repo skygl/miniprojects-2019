@@ -4,6 +4,8 @@ import com.wootecobook.turkey.BaseControllerTests;
 import com.wootecobook.turkey.messenger.service.dto.MessengerRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -12,11 +14,18 @@ class MessengerControllerTest extends BaseControllerTests {
 
     private static final String MESSENGER_URI = "/messenger/{roomId}";
 
+    @LocalServerPort
+    private String port;
+
     private String userJSessionId;
     private MessengerRequest messengerRequest;
 
     @BeforeEach
     void setUp() {
+        webTestClient = WebTestClient.bindToServer()
+                .baseUrl(DOMAIN + port)
+                .build();
+
         String userEmail = "u1@mail.com";
         addUser("name", userEmail, VALID_USER_PASSWORD);
         userJSessionId = logIn(userEmail, VALID_USER_PASSWORD);

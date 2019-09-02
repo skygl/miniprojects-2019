@@ -5,6 +5,8 @@ import com.wootecobook.turkey.messenger.service.dto.MessengerRequest;
 import com.wootecobook.turkey.messenger.service.dto.MessengerRoomResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -13,12 +15,19 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 
 class MessengerApiControllerTest extends BaseControllerTests {
 
+    @LocalServerPort
+    private String port;
+
     private String userJSessionId;
     private Long memberUserId;
     private MessengerRequest messengerRequest;
 
     @BeforeEach
     void setUp() {
+        webTestClient = WebTestClient.bindToServer()
+                .baseUrl(DOMAIN + port)
+                .build();
+
         String userEmail = "u1@mail.com";
         addUser("name", userEmail, VALID_USER_PASSWORD);
         userJSessionId = logIn(userEmail, VALID_USER_PASSWORD);

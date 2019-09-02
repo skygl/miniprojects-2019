@@ -8,7 +8,6 @@ const friendAskModule = (function () {
             .then(res => res.json())
             .then(data => {
                 for (let i = 0; i < data.length; i++) {
-                    console.log(data[i])
                     createFriendAskDOM(data[i])
                 }
 

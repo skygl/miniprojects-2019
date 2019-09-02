@@ -38,7 +38,7 @@ const friendBarModule = (function () {
         const btns = document.getElementsByClassName('FriendAsk')
         for (let i = 0; i < btns.length; i++) {
             btns[i].addEventListener('click', async function (event) {
-                const data = {"receiverId": event.target.parentNode.parentNode.getAttribute("data-id")}
+                const data = {"receiverId": event.target.closest('div.data-id').dataset.id}
                 const res = await api.POST("/api/friends/asks", data)
 
 	            if(res.status == 201) {
@@ -55,7 +55,7 @@ const friendBarModule = (function () {
 		const btns = document.getElementsByClassName('FriendRemove')
 		for(let i = 0; i < btns.length; i++) {
 			btns[i].addEventListener('click', async function(event) {
-                const friendId = event.target.parentNode.parentNode.getAttribute("data-id")
+                const friendId = event.target.closest('div.data-id').dataset.id
                 const res = await api.DELETE("/api/friends/" + friendId)
 
 	            if(res.status == 204) {

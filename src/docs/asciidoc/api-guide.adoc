@@ -1,0 +1,1059 @@
+= TurkeyBook REST API Docs
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+:snippets: ../../../build/generated-snippets
+
+[[Introduction]]
+== 소개
+이 문서는 Turkeybook 서비스의 API 명세를 작성한 문서입니다.
+
+아래 예시에서 나온 포트는 WebTestClient와 Spring MVC 간 차이 문제로 임시로 배정한 포트입니다.
+
+요청 포트보다 `path`와 요청, 응답 형식에 집중해주세요 ^^
+
+[[Environment]]
+== 개발 환경
+[cols="2*^"]
+|===
+| 환경 | 버전
+
+| Java | 1.8 JDK
+| Spring Boot | 2.1.7.RELEASE
+| DB(MySQL) | 8.0.17
+| AWS EC2 | -
+| AWS S3 | -
+|===
+
+[[Common]]
+== 공통사항
+
+API에 공통으로 적용되는 사항입니다.
+
+=== Cookie
+
+TurkeyBook의 API 서버 인증은 쿠키 & 세션으로 관리하고 있습니다. 따라서 **회원가입**, **로그인**을 제외한 모든 API 요청은 아래 쿠키를 필요로 합니다.
+
+[cols="2*^"]
+|===
+| field | description
+| JSESSIONID | 서버의 세션에 접근하기 위한 key
+|===
+
+== User API
+
+=== CREATE
+
+유저 생성 API 관련 형식 및 예시
+
+Request 형식:
+
+include::{snippets}/user/201/create/request-fields.adoc[]
+
+Response Header 형식:
+
+include::{snippets}/user/201/create/response-headers.adoc[]
+
+Response Body 형식:
+
+include::{snippets}/user/201/create/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/user/201/create/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/user/201/create/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/user/201/create/http-response.adoc[]
+
+=== Error
+
+User 생성과 관련된 오류 발생 조건은 다음과 같습니다.
+
+- password : 이메일 형식이 아닌 경우
+- name : 문자 2~10글자 형식이 아닌 경우
+- passowrd : 영대소문자, 숫자, 특수문자를 모두 포함한 8~20자
+- 이메일 중복
+
+이 모든 오류는 400 응답코드를 반환하며 다음과 같은 필드 형식을 같습니다.
+
+Response Body 형식:
+
+include::{snippets}/user/400/create/password/response-fields.adoc[]
+
+==== Email 오류
+
+이메일 형식이 아닌 경우
+
+CURL:
+
+include::{snippets}/user/400/create/email/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/user/400/create/email/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/user/400/create/email/http-response.adoc[]
+
+==== name 오류
+
+이름 형식에 맞지 않는 경우
+
+CURL:
+
+include::{snippets}/user/400/create/name/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/user/400/create/name/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/user/400/create/name/http-response.adoc[]
+
+==== password 오류
+
+password 형식에 맞지 않는 경우
+
+CURL:
+
+include::{snippets}/user/400/create/password/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/user/400/create/password/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/user/400/create/password/http-response.adoc[]
+
+==== email 중복
+
+이미 가입된 email이 있는 경우
+
+CURL:
+
+include::{snippets}/user/400/create/overlap/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/user/400/create/overlap/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/user/400/create/overlap/http-response.adoc[]
+
+=== READ
+
+유저 조회 API 관련 형식 및 예시
+
+Request Path Parameter:
+
+include::{snippets}/user/200/read/path-parameters.adoc[]
+
+Response Body 형식:
+
+include::{snippets}/user/200/read/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/user/200/read/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/user/200/read/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/user/200/read/http-response.adoc[]
+
+=== Error
+
+User 조회와 관련된 오류 발생 조건은 다음과 같습니다.
+
+- 존재하지 않는 유저 id인 경우
+
+이 모든 오류는 400 응답코드를 반환하며 다음과 같은 필드 형식을 같습니다.
+
+Response Body 형식:
+
+include::{snippets}/user/400/create/password/response-fields.adoc[]
+
+
+==== 존재하지 않는 유저
+
+CURL:
+
+include::{snippets}/user/400/read/none/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/user/400/read/none/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/user/400/read/none/http-response.adoc[]
+
+=== Update
+
+유저 수정 API는 지원하지 않습니다.
+
+=== Delete
+
+유저 삭제 API 관련 형식 및 예시
+
+Request Path Parameter:
+
+include::{snippets}/user/204/delete/path-parameters.adoc[]
+
+CURL:
+
+include::{snippets}/user/204/delete/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/user/204/delete/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/user/204/delete/http-response.adoc[]
+
+==== Error
+
+User 삭제와 관련된 오류 발생 조건은 다음과 같습니다.
+
+- 존재하지 않는 유저 id인 경우
+
+이 모든 오류는 400 응답코드를 반환하며 다음과 같은 필드 형식을 같습니다.
+
+Response Body 형식:
+
+include::{snippets}/user/400/create/password/response-fields.adoc[]
+
+==== 존재하지 않는 유저
+
+CURL:
+
+include::{snippets}/user/400/delete/none/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/user/400/delete/none/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/user/400/delete/none/http-response.adoc[]
+
+== Login API
+
+로그인 API 관련 형식 및 예시
+
+Request 형식:
+
+include::{snippets}/login/request-fields.adoc[]
+
+Response Body 형식:
+
+include::{snippets}/login/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/login/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/login/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/login/http-response.adoc[]
+
+== Logout API
+
+로그아웃 API 관련 형식 및 예시
+
+Response Body 형식:
+
+include::{snippets}/login/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/login/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/login/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/login/http-response.adoc[]
+
+== Introduction API
+
+=== CREATE
+
+유저의 소개를 작성하는 API 관련 형식 및 예시
+
+Request Path Parameters:
+
+include::{snippets}/introduction/200/create/path-parameters.adoc[]
+
+Response Body 형식:
+
+include::{snippets}/introduction/200/create/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/introduction/200/create/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/introduction/200/create/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/introduction/200/create/http-response.adoc[]
+
+==== Error
+
+소개 작성시 발생하는 오류는 다음과 같습니다.
+
+- 소개 내용이 없는 경우
+
+이 모든 오류는 400 응답코드를 반환하며 다음과 같은 필드 형식을 같습니다.
+
+==== 소개 내용이 없는 경우
+
+Response Body 형식:
+
+include::{snippets}/introduction/400/create/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/introduction/400/create/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/introduction/400/create/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/introduction/400/create/http-response.adoc[]
+
+=== Update
+
+유저의 소개를 수정하는 API 관련 형식 및 예시
+
+Request Path Parameters:
+
+include::{snippets}/introduction/200/update/path-parameters.adoc[]
+
+Response Body 형식:
+
+include::{snippets}/introduction/200/update/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/introduction/200/update/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/introduction/200/update/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/introduction/200/update/http-response.adoc[]
+
+==== Error
+
+소개 수정시 발생하는 오류는 다음과 같습니다.
+
+- id가 null이거나 존재하지 않는 소개의 경우
+
+이 모든 오류는 400 응답코드를 반환하며 다음과 같은 필드 형식을 같습니다.
+
+Response Body 형식:
+
+include::{snippets}/introduction/400/update/response-fields.adoc[]
+
+==== id가 null인 경우
+
+CURL:
+
+include::{snippets}/introduction/400/create/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/introduction/400/create/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/introduction/400/create/http-response.adoc[]
+
+== Friend Ask
+
+친구 요청 관련 API 형식 및 예시
+
+=== Create
+
+친구 요청을 만드는 API 관련 형식 및 예시
+
+Request 형식:
+
+include::{snippets}/friend/ask/201/create/request-fields.adoc[]
+
+Response Body 형식:
+
+include::{snippets}/friend/ask/201/create/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/friend/ask/201/create/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/friend/ask/201/create/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/friend/ask/201/create/http-response.adoc[]
+
+==== Error
+
+친구 요청 생성시 발생하는 오류는 다음과 같습니다.
+
+- 이미 친구인 경우
+- 이미 친구 요청을 한 경우
+- 이미 친구 요청을 받은 경우
+
+이 모든 오류는 400 응답코드를 반환하며 다음과 같은 필드 형식을 같습니다.
+
+Response Body 형식:
+
+include::{snippets}/friend/ask/400/already-exist/response-fields.adoc[]
+
+==== 존재하지 않는 id인 경우
+
+CURL:
+
+include::{snippets}/friend/ask/400/create/none/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/friend/ask/400/create/none/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/friend/ask/400/create/none/http-response.adoc[]
+
+==== 이미 친구인 경우
+
+CURL:
+
+include::{snippets}/friend/ask/400/create/already-friend/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/friend/ask/400/create/already-friend/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/friend/ask/400/create/already-friend/http-response.adoc[]
+
+==== 이미 친구 요청을 한 경우
+
+CURL:
+
+include::{snippets}/friend/ask/400/already-exist/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/friend/ask/400/already-exist/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/friend/ask/400/already-exist/http-response.adoc[]
+
+==== 이미 친구 요청을 받은 경우
+
+CURL:
+
+include::{snippets}/friend/ask/400/already-receive/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/friend/ask/400/already-receive/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/friend/ask/400/already-receive/http-response.adoc[]
+
+=== Read
+
+친구 요청을 조회하는 API 관련 형식 및 예시
+
+Response Body 형식:
+
+include::{snippets}/friend/ask/200/read/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/friend/ask/200/read/curl-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/friend/ask/200/read/http-response.adoc[]
+
+=== Delete
+
+친구 요청을 삭제하는 API 관련 형식 및 예시
+
+Request Path Parameters:
+
+include::{snippets}/friend/ask/204/delete/path-parameters.adoc[]
+
+Response Body 형식:
+
+include::{snippets}/friend/ask/200/read/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/friend/ask/200/read/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/friend/ask/200/read/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/friend/ask/200/read/http-response.adoc[]
+
+==== Error
+
+친구 요청 삭제시 발생하는 오류는 다음과 같습니다.
+
+- 존재하지 않는 친구 요청인 경우
+
+이 모든 오류는 400 응답코드를 반환하며 다음과 같은 필드 형식을 같습니다.
+
+Response Body 형식:
+
+include::{snippets}/friend/ask/400/delete/response-fields.adoc[]
+
+==== 존재하지 않는 친구 요청
+
+CURL:
+
+include::{snippets}/friend/ask/400/delete/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/friend/ask/400/delete/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/friend/ask/400/delete/http-response.adoc[]
+
+== Friend
+
+친구 관련 API 형식 및 예시
+
+=== Create
+
+친구 생성 API 관련 형식 및 예시
+
+Request 형식:
+
+include::{snippets}/friend/201/create/request-fields.adoc[]
+
+CURL:
+
+include::{snippets}/friend/201/create/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/friend/201/create/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/friend/201/create/http-response.adoc[]
+
+=== Read
+
+친구 조회 API 관련 형식 및 예시
+
+Response Body 형식:
+
+include::{snippets}/friend/200/read/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/friend/200/read/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/friend/200/read/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/friend/200/read/http-response.adoc[]
+
+=== Delete
+
+친구 삭제 API 관련 형식 및 예시
+
+Request Path Parameters:
+
+include::{snippets}/friend/204/delete/path-parameters.adoc[]
+
+CURL:
+
+include::{snippets}/friend/204/delete/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/friend/204/delete/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/friend/204/delete/http-response.adoc[]
+
+== Post
+
+게시물 관련 API 형식 및 예시
+
+=== Create
+
+게시물을 만드는 API 관련 형식 및 예시
+
+==== 사진, 동영상이 있는 경우
+
+Request Parts:
+
+include::{snippets}/post/201/create/withfiles/request-parts.adoc[]
+
+Response Body 형식:
+
+include::{snippets}/post/201/create/withfiles/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/post/201/create/withfiles/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/post/201/create/withfiles/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/post/201/create/withfiles/http-response.adoc[]
+
+==== 사진, 동영상이 없는 경우
+
+사진, 동영상이 없는 경우는 위 예시에서 Request Parts만 없는 형식입니다.
+
+Request Parts:
+
+include::{snippets}/post/201/create/nofiles/request-parts.adoc[]
+
+Response Body 형식:
+
+include::{snippets}/post/201/create/nofiles/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/post/201/create/nofiles/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/post/201/create/nofiles/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/post/201/create/nofiles/http-response.adoc[]
+
+==== Error
+
+Post 생성시 발생하는 오류는 다음과 같습니다.
+
+- 글의 내용이 없는 경우
+
+이 모든 오류는 400 응답코드를 반환하며 다음과 같은 필드 형식을 같습니다.
+
+Response Body 형식:
+
+include::{snippets}/post/400/no-content/create/response-fields.adoc[]
+
+==== 글의 내용이 없는 경우
+
+CURL:
+
+include::{snippets}/post/400/no-content/create/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/post/400/no-content/create/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/post/400/no-content/create/http-response.adoc[]
+
+=== Read
+
+글 조회 API 관련 형식 및 예시
+
+Request Parameters:
+
+include::{snippets}/post/200/read/request-parameters.adoc[]
+
+Response Body 형식:
+
+include::{snippets}/post/200/read/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/post/200/read/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/post/200/read/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/post/200/read/http-response.adoc[]
+
+=== Update
+
+글 수정 API 관련 형식 및 예시
+
+Request Path Parameters:
+
+include::{snippets}/post/200/update/path-parameters.adoc[]
+
+Request 형식:
+
+include::{snippets}/post/200/update/request-fields.adoc[]
+
+Response Body 형식:
+
+include::{snippets}/post/200/update/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/post/200/update/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/post/200/update/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/post/200/update/http-response.adoc[]
+
+==== Error
+
+글 수정시 발생하는 오류는 다음과 같습니다.
+
+- 현재 로그인 한 유저가 해당 글을 작성한 작성자가 아닌 경우
+
+이 모든 오류는 400 응답코드를 반환하며 다음과 같은 필드 형식을 같습니다.
+
+Response Body 형식:
+
+include::{snippets}/post/400/no-auth/update/response-fields.adoc[]
+
+==== 현재 로그인 한 유저가 해당 글을 작성한 작성자가 아닌 경우
+
+CURL:
+
+include::{snippets}/post/400/no-auth/update/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/post/400/no-auth/update/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/post/400/no-auth/update/http-response.adoc[]
+
+=== Delete
+
+글 삭제 API 관련 형식 및 예시
+
+Request Path Parameters:
+
+include::{snippets}/post/204/delete/path-parameters.adoc[]
+
+CURL:
+
+include::{snippets}/post/204/delete/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/post/204/delete/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/post/204/delete/http-response.adoc[]
+
+==== Error
+
+글 삭제시 발생하는 오류는 다음과 같습니다.
+
+- 현재 로그인 한 유저가 해당 글을 작성한 작성자가 아닌 경우
+- 존재하지 않는 글인 경우
+
+이 모든 오류는 400 응답코드를 반환하며 다음과 같은 필드 형식을 같습니다.
+
+Response Body 형식:
+
+include::{snippets}/post/400/delete/no-auth/response-fields.adoc[]
+
+==== 현재 로그인 한 유저가 해당 글을 작성한 작성자가 아닌 경우
+
+CURL:
+
+include::{snippets}/post/400/delete/no-auth/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/post/400/delete/no-auth/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/post/400/delete/no-auth/http-response.adoc[]
+
+==== 존재하지 않는 글인 경우
+
+CURL:
+
+include::{snippets}/post/400/delete/none/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/post/400/delete/none/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/post/400/delete/none/http-response.adoc[]
+
+== Post Good
+
+게시글 좋아요 API 관련 형식 및 예시
+
+=== Toggle Good
+
+좋아요 및 좋아요 취소 API 관련 형식 및 예시
+
+Request Path Parameters:
+
+include::{snippets}/post/200/good/create/path-parameters.adoc[]
+
+Response Body 형식:
+
+include::{snippets}/post/200/good/create/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/post/200/good/create/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/post/200/good/create/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/post/200/good/create/http-response.adoc[]
+
+== Comment
+
+댓글 관련 API 형식 및 예시
+
+=== Create
+
+댓글 생성 관련 API 형식 및 예시
+
+Request Path Parameters:
+
+include::{snippets}/comment/201/create/path-parameters.adoc[]
+
+Request Body 형식:
+
+include::{snippets}/comment/201/create/request-fields.adoc[]
+
+Response Body 형식:
+
+include::{snippets}/comment/201/create/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/comment/201/create/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/comment/201/create/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/comment/201/create/http-response.adoc[]
+
+=== READ
+
+댓글 조회 관련 API 형식 및 예시
+
+Request Path Parameters:
+
+include::{snippets}/comment/200/read/path-parameters.adoc[]
+
+Request Parameters:
+
+include::{snippets}/comment/200/read/request-parameters.adoc[]
+
+Response Body 형식:
+
+include::{snippets}/comment/200/read/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/comment/200/read/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/comment/200/read/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/comment/200/read/http-response.adoc[]
+
+=== Update
+
+댓글 수정 관련 API 형식 및 예시
+
+Request Path Parameters:
+
+include::{snippets}/comment/200/update/path-parameters.adoc[]
+
+Request Body 형식:
+
+include::{snippets}/comment/200/update/request-fields.adoc[]
+
+Response Body 형식:
+
+include::{snippets}/comment/200/update/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/comment/200/update/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/comment/200/update/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/comment/200/update/http-response.adoc[]
+
+==== Error
+
+댓글 수정시 발생할 수 있는 오류는 다음과 같습니다.
+
+- 현재 로그인 한 유저가 해당 댓글을 작성한 작성자가 아닌 경우
+
+이 모든 오류는 400 응답코드를 반환하며 다음과 같은 필드 형식을 같습니다.
+
+Response Body 형식:
+
+include::{snippets}/comment/400/update/no-auth/response-fields.adoc[]
+
+==== 현재 로그인 한 유저가 해당 댓글을 작성한 작성자가 아닌 경우
+
+CURL:
+
+include::{snippets}/comment/400/update/no-auth/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/comment/400/update/no-auth/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/comment/400/update/no-auth/http-response.adoc[]
+
+=== Delete
+
+댓글 삭제 관련 API 형식 및 예시
+
+Request Path Parameters:
+
+include::{snippets}/comment/204/delete/path-parameters.adoc[]
+
+CURL:
+
+include::{snippets}/comment/200/update/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/comment/200/update/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/comment/200/update/http-response.adoc[]
+
+== Comment Good
+
+댓글 & 답글 좋아요 관련 API 형식 및 예시
+
+=== Toggle Good
+
+좋아요 및 좋아요 취소 관련 API 형식 및 예시
+
+Request Path Parameters:
+
+include::{snippets}/comment/good/200/create/path-parameters.adoc[]
+
+Response Body 형식:
+
+include::{snippets}/comment/good/200/create/response-fields.adoc[]
+
+CURL:
+
+include::{snippets}/comment/good/200/create/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/comment/good/200/create/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/comment/good/200/create/http-response.adoc[]
+
+== Reply
+
+답글 관련 API 형식 및 예시
+
+답글은 댓글 작성과 거의 비슷한 형식을 띕니다. 답글 작성시 parentId를 전달하여 답글을 생성합니다.
+
+<<Comment>>
+
+=== Read
+
+CURL:
+
+include::{snippets}/comment/reply/200/read/curl-request.adoc[]
+
+요청 예시:
+
+include::{snippets}/comment/reply/200/read/http-request.adoc[]
+
+응답 예시:
+
+include::{snippets}/comment/reply/200/read/http-response.adoc[]

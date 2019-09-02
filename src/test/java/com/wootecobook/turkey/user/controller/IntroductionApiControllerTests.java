@@ -7,16 +7,25 @@ import com.wootecobook.turkey.user.service.dto.IntroductionResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.PathParametersSnippet;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-import static com.wootecobook.turkey.user.service.IntroductionService.*;
+import static com.wootecobook.turkey.user.service.IntroductionService.MISMATCH_USER_MESSAGE;
+import static com.wootecobook.turkey.user.service.IntroductionService.NOT_FOUND_INTRODUCTION_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
+import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration;
 
-
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class IntroductionApiControllerTests extends BaseControllerTests {
 
     private static final String INTRODUCTION_URI = "/api/users/{userId}/introduction";
@@ -25,13 +34,34 @@ class IntroductionApiControllerTests extends BaseControllerTests {
     private static final String EDUCATION = "EDUCATION";
     private static final String COMPANY = "COMPANY";
 
-    @Autowired
-    private WebTestClient webTestClient;
+    @LocalServerPort
+    private String port;
+
+    private final PathParametersSnippet userIdPathParametersSnippet = pathParameters(
+            parameterWithName("userId").description("해당 소개 정보를 가지는 유저의 id")
+    );
+
+    private final ResponseFieldsSnippet introductionResponseFieldsSnippet = responseFields(
+            fieldWithPath("id").description("소개의 고유 식별자"),
+            fieldWithPath("currentCity").type(JsonFieldType.STRING).optional().description("유저의 거주 도시"),
+            fieldWithPath("hometown").type(JsonFieldType.STRING).optional().description("유저의 출신지"),
+            fieldWithPath("company").type(JsonFieldType.STRING).optional().description("유저의 현재 회사"),
+            fieldWithPath("education").type(JsonFieldType.STRING).optional().description("유저의 학력"),
+            fieldWithPath("userId").description("해당 유저의 고유 식별자")
+    );
 
     private Long userId;
 
     @BeforeEach
-    void setUp() {
+    void setUp(RestDocumentationContextProvider restDocumentation) {
+        webTestClient = WebTestClient.bindToServer()
+                .baseUrl(DOMAIN + port)
+                .filter(documentationConfiguration(restDocumentation)
+                        .operationPreprocessors()
+                        .withRequestDefaults(prettyPrint())
+                        .withResponseDefaults(prettyPrint()))
+                .build();
+
         userId = addUser(VALID_USER_NAME, VALID_USER_EMAIL, VALID_USER_PASSWORD);
     }
 
@@ -43,6 +73,10 @@ class IntroductionApiControllerTests extends BaseControllerTests {
                 .cookie(JSESSIONID, logIn(VALID_USER_EMAIL, VALID_USER_PASSWORD))
                 .exchange()
                 .expectBody(IntroductionResponse.class)
+                .consumeWith(document("introduction/200/create",
+                        userIdPathParametersSnippet,
+                        introductionResponseFieldsSnippet
+                ))
                 .returnResult()
                 .getResponseBody();
 
@@ -62,6 +96,10 @@ class IntroductionApiControllerTests extends BaseControllerTests {
                 .cookie(JSESSIONID, logIn(VALID_USER_EMAIL, VALID_USER_PASSWORD))
                 .exchange()
                 .expectBody(ErrorMessage.class)
+                .consumeWith(document("introduction/400/create",
+                        userIdPathParametersSnippet,
+                        badRequestSnippets
+                ))
                 .returnResult()
                 .getResponseBody();
 
@@ -87,6 +125,10 @@ class IntroductionApiControllerTests extends BaseControllerTests {
                 .body(Mono.just(introductionRequest), IntroductionRequest.class)
                 .exchange()
                 .expectBody(IntroductionResponse.class)
+                .consumeWith(document("introduction/200/update",
+                        userIdPathParametersSnippet,
+                        introductionResponseFieldsSnippet
+                ))
                 .returnResult()
                 .getResponseBody();
 
@@ -117,6 +159,10 @@ class IntroductionApiControllerTests extends BaseControllerTests {
                 .body(Mono.just(introductionRequest), IntroductionRequest.class)
                 .exchange()
                 .expectBody(ErrorMessage.class)
+                .consumeWith(document("introduction/400/update",
+                        userIdPathParametersSnippet,
+                        badRequestSnippets
+                ))
                 .returnResult()
                 .getResponseBody();
 

@@ -5,7 +5,6 @@ import com.wootecobook.turkey.file.domain.UploadFile;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -76,6 +75,7 @@ public class User extends UpdatableEntity {
     public boolean isLogin() {
         return loginAt.isAfter(logoutAt);
     }
+
     public void uploadProfile(UploadFile profile) {
         this.profile = profile;
     }

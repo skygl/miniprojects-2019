@@ -1,5 +1,6 @@
 plugins {
     id 'org.springframework.boot' version '2.1.7.RELEASE'
+    id 'org.asciidoctor.convert' version '1.5.7'
     id 'java'
 }
 
@@ -25,6 +26,7 @@ repositories {
 }
 
 ext {
+    snippetsDir = file('build/generated-snippets')
     set('springCloudVersion', "Greenwich.BUILD-SNAPSHOT")
 }
 
@@ -50,7 +52,8 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
 
     annotationProcessor 'org.projectlombok:lombok'
-
+    asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.3.RELEASE'
+    testImplementation "org.springframework.restdocs:spring-restdocs-webtestclient:2.0.3.RELEASE"
     testImplementation 'io.findify:s3mock_2.12:0.2.5'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation 'org.mockito:mockito-junit-jupiter'
@@ -60,8 +63,23 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'junit'
     }
+}
 
+test {
+    useJUnitPlatform()
+    outputs.dir snippetsDir
+}
 
+asciidoctor {
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from ("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
 }
 
 dependencyManagement {

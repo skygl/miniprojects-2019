@@ -14,6 +14,7 @@ import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
@@ -40,6 +41,7 @@ class WebSocketMessengerControllerTest extends BaseControllerTests {
 
     @LocalServerPort
     private String port;
+
     private String userJSessionId;
     private Long userId;
     private Long roomId;
@@ -50,6 +52,10 @@ class WebSocketMessengerControllerTest extends BaseControllerTests {
 
     @BeforeEach
     void setUp() {
+        webTestClient = WebTestClient.bindToServer()
+                .baseUrl(DOMAIN + port)
+                .build();
+
         String userEmail = "messenger@mail.com";
         userId = userId == null ? addUser("name", userEmail, VALID_USER_PASSWORD) : userId;
         userJSessionId = logIn(userEmail, VALID_USER_PASSWORD);
