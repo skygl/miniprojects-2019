@@ -30,7 +30,7 @@ class SearchControllerTests extends BaseControllerTests {
         addUser(name, email, VALID_USER_PASSWORD);
 
         // when & then
-        webTestClient.get().uri(uri + "/dpu")
+        webTestClient.get().uri(uri + "?keyword=dpu")
                 .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isOk();

@@ -72,11 +72,12 @@ public class UserApiController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{name}/search")
-    public ResponseEntity<Page<UserResponse>> search(@PathVariable String name,
+    @GetMapping("/search")
+    public ResponseEntity<Page<UserResponse>> search(@RequestParam String name,
                                                      @PageableDefault(size = 5, sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
         Page<UserResponse> userResponses = userService.findByName(name, pageable);
+
         return ResponseEntity.ok(userResponses);
     }
 

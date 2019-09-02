@@ -874,30 +874,6 @@ include::{snippets}/post/200/good/create/http-request.adoc[]
 
 include::{snippets}/post/200/good/create/http-response.adoc[]
 
-== Post Search
-
-게시글 검색 API 관련 형식 및 예시
-
-Request Path Parameters:
-
-include::{snippets}/post/200/search/path-parameters.adoc[]
-
-Response Body 형식:
-
-include::{snippets}/post/200/search/response-fields.adoc[]
-
-CURL:
-
-include::{snippets}/post/200/search/curl-request.adoc[]
-
-요청 예시:
-
-include::{snippets}/post/200/search/http-request.adoc[]
-
-응답 예시:
-
-include::{snippets}/post/200/search/http-response.adoc[]
-
 == Comment
 
 댓글 관련 API 형식 및 예시

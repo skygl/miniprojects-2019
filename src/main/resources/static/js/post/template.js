@@ -159,7 +159,7 @@ const dateFormatting = (date) => {
 
 const dateFormat = (date, updated) => {
     date = new Date(date)
-    const timeDiff = Math.floor((Date.now() - date) / (1000 * 60 * 24))
+    const timeDiff = Math.floor((Date.now() - date + 1000) / (1000 * 60 * 60))
 
     return timeDiff < 24 ? `${timeDiff}시간 전` : dateFormatting(date) +
         (updated ? '(edited)' : '')

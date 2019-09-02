@@ -6,6 +6,9 @@ const posts = document.getElementById('contents')
 let totalPage;
 let currentPageNumber = 1;
 
+const MAX_FILE_SIZE = 100 * 1024 * 1024
+let total_file_size = 0
+
 const initLoad = async () => {
     await api.GET(POST_URL)
         .then(res => res.json())
@@ -36,30 +39,46 @@ const initLoad = async () => {
         const len = files.length;
         for (let i = 0; i < len; i++) {
             formData.append('files', files[i]);
+            total_file_size += files[i].size
         }
 
-        formDataApi.POST(POST_URL, formData)
-            .then(res => {
-                if (res.status == 201) {
-                    return res.json();
-                }
-                throw res
-            })
-            .then(post => {
-                posts.prepend(createPostDOM(post))
+        if (total_file_size > MAX_FILE_SIZE) {
+            alert("최대 파일 크기를 초과했습니다.\n현재 파일 크기 : " + total_file_size + " bytes\n최대 파일 크기 : " + MAX_FILE_SIZE + " bytes")
+            total_file_size = 0
+            const files_preview_dom = document.getElementsByClassName("files-preview")[0]
+            while ( files_preview_dom.hasChildNodes() ) {
+                files_preview_dom.removeChild(files_preview_dom.firstChild );
+            }
+            const postWriteContainer = writeArea.closest('.card')
+            const filesPreviewContainer = postWriteContainer.querySelector('.files-preview')
+            filesPreviewContainer.innerHTML = ''
+            fileForm.value = ''
+            writeArea.value = ''
+        }
+        else {
+            formDataApi.POST(POST_URL, formData)
+                        .then(res => {
+                            if (res.status == 201) {
+                                return res.json();
+                            }
+                            throw res
+                        })
+                        .then(post => {
+                            posts.prepend(createPostDOM(post))
 
-                const postWriteContainer = writeArea.closest('.card');
-                const filesPreviewContainer = postWriteContainer.querySelector('.files-preview');
-                filesPreviewContainer.innerHTML = ''
-                fileForm.value = ''
-                writeArea.value = ''
+                            const postWriteContainer = writeArea.closest('.card');
+                            const filesPreviewContainer = postWriteContainer.querySelector('.files-preview');
+                            filesPreviewContainer.innerHTML = ''
+                            fileForm.value = ''
+                            writeArea.value = ''
 
 
-            })
-            .catch(error => {
-                error.json().then(errorMessage =>
-                    alert(errorMessage.message))
-            })
+                        })
+                        .catch(error => {
+                            error.json().then(errorMessage =>
+                                alert(errorMessage.message))
+                        })
+        }
     })
 }
 

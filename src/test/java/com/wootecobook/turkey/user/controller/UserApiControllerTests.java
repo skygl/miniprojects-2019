@@ -401,16 +401,13 @@ class UserApiControllerTests extends BaseControllerTests {
 
         // when & then
         webTestClient.get()
-                .uri(USER_API_URI_WITH_SLASH  + "{name}/search", name)
+                .uri(USER_API_URI_WITH_SLASH  + "search?name={name}", name)
                 .cookie(JSESSIONID, logIn(email, VALID_USER_PASSWORD))
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody()
-                .consumeWith(document("post/200/search",
-                        pathParameters(
-                                parameterWithName("name").description("검색 단어")
-                        ),
+                .consumeWith(document("post/search/200",
                         pageResponseSnippets.and(
                                 subsectionWithPath("pageable").description("페이지 정보"),
                                 subsectionWithPath("content").description("조회하고자 하는 해당 페이지의 Post 목록"),

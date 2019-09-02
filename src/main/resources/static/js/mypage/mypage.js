@@ -54,6 +54,8 @@ const feedInitLoad = async () => {
 const loadWriteForm = (receiver) => {
     const writeContainer = document.getElementById("write-post")
     writeContainer.innerHTML = writeFormTemplate(receiver)
+
+    initLoad()
 }
 
 const addUpdateListener = () => {
