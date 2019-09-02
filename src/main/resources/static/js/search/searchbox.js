@@ -10,10 +10,9 @@ const searchbox = function (event) {
         return
     }
 
-    api.GET(`/api/users/search?name=${keyword}`)
+    api.GET(`/api/search/${keyword}`)
         .then(res => res.json())
         .then(users => {
-            console.log(users)
             dropdownMenu.innerHTML = ''
             searchDropdown.classList.add('show')
 
