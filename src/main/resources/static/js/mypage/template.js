@@ -15,7 +15,7 @@ const feedTemplatesCreator = () => {
             }
 
             return `
-            <div id="display-card" class="card-contents display-card">
+            <div id="display-card" class="card-contents display-card display-block display-none">
                 <div>
                     <i class="education-icon"></i><span class="introduction-card" id="education-card"> ${introduction.education}</span>
                 </div>
@@ -66,7 +66,7 @@ const feedTemplates = feedTemplatesCreator()
 
 const updateForm = `
 <form id="up">
-    <div id="update-card" class="card-contents update-card">
+    <div id="update-card" class="card-contents update-card display-none">
         <div>
             <i class="education-icon"></i>
             <input class="update-introduction-input" id="education-input" type="text" name="education" value="a"/>
@@ -90,7 +90,7 @@ const updateForm = `
 
 const updateIntroductionBtn = (introduction) => `
 <div>
-    <button id="introduction-update-btn"class="introduction-update-btn" data-id=${introduction.id}>수정하기</button>
-    <button id="introduction-display-btn"class="introduction-display-btn" data-id=${introduction.id}>수정완료</button>  
+    <button id="introduction-update-btn"class="introduction-update-btn display-block display-none" data-id=${introduction.id}>수정하기</button>
+    <button id="introduction-display-btn"class="introduction-display-btn display-none" data-id=${introduction.id}>수정완료</button>  
 </div>
 `

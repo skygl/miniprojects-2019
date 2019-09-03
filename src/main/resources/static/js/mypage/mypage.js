@@ -80,10 +80,12 @@ const addUpdateListener = () => {
                 document.getElementById("current-city-input").value = checkNull(introduction.currentCity)
                 document.getElementById("hometown-input").value = checkNull(introduction.hometown)
                 document.getElementById("company-input").value = checkNull(introduction.company)
-                display_card.style.display = "none"
-                update_card.style.display = "block"
-                update_btn.style.display = "none"
-                display_btn.style.display = "block"
+
+                display_card.classList.remove('display-block')
+                update_btn.classList.remove('display-block')
+
+                update_card.classList.add('display-block')
+                display_btn.classList.add('display-block')
             })
     })
     display_btn.addEventListener('click', function () {
@@ -100,10 +102,12 @@ const addUpdateListener = () => {
                 document.getElementById("current-city-card").innerHTML = checkNull(introduction.currentCity)
                 document.getElementById("hometown-card").innerHTML = checkNull(introduction.hometown)
                 document.getElementById("company-card").innerHTML = checkNull(introduction.company)
-                display_card.style.display = "block"
-                update_card.style.display = "none"
-                update_btn.style.display = "block"
-                display_btn.style.display = "none"
+
+                display_card.classList.add('display-block')
+                update_btn.classList.add('display-block')
+
+                update_card.classList.remove('display-block')
+                display_btn.classList.remove('display-block')
             })
     })
 }

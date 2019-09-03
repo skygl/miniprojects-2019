@@ -248,10 +248,6 @@ body {
     white-space: nowrap;
 }
 
-.display-card, .introduction-update-btn {
-    display: block;
-}
-
-.update-card, .introduction-display-btn {
+.display-none {
     display: none;
 }
