@@ -9,7 +9,7 @@ git pull
 
 echo "> 프로젝트 Build 시작"
 
-./gradlew -x build
+./gradlew build -x test
 
 echo "> 현재 구동중인 애플리케이션 pid 확인"
 
