@@ -11,12 +11,12 @@ const initLoad = async () => {
         .catch(error => console.error(error))
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     initLoad();
     WebSocket.init();
 });
 
-const WebSocket = (function() {
+const WebSocket = (function () {
     const SERVER_SOCKET_API = "/websocket";
     let stompClient;
 
@@ -26,23 +26,23 @@ const WebSocket = (function() {
         // SockJS와 stomp client를 통해 연결을 시도.
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/messenger/'+roomId, function (chat) {
+            stompClient.subscribe(`/topic/messenger/${roomId}`, function (chat) {
                 showMessage(JSON.parse(chat.body));
             })
         });
     }
 
-    function clear(input) {
+    const clear = (input) => {
         input.value = "";
     }
 
     const sendMessage = () => {
         const message = document.getElementById('messageInput').value
-        stompClient.send("/app/messenger/"+roomId, {}, JSON.stringify({'message': message}));
+        stompClient.send(`/app/messenger/${roomId}`, {}, JSON.stringify({'message': message}));
         clear(document.getElementById('messageInput'))
     }
 
-    const init = function () {
+    const init = () => {
         const sendButton = document.getElementById('sendMessage');
         sendButton.addEventListener('click', sendMessage);
 
@@ -61,7 +61,7 @@ const showMessage = (message) => {
         div.innerHTML = messageTemplate
         div.querySelector('.sender').innerText = message.sender.name
         div.querySelector('.text').innerText = message.content
-        div.querySelector('li').setAttribute('class', 'message appeared '+direction)
+        div.querySelector('li').setAttribute('class', 'message appeared ' + direction)
         return div.firstElementChild
     }
 

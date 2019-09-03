@@ -48,38 +48,35 @@ const initLoad = async () => {
             alert("최대 파일 크기를 초과했습니다.\n현재 파일 크기 : " + total_file_size + " bytes\n최대 파일 크기 : " + MAX_FILE_SIZE + " bytes")
             total_file_size = 0
             const files_preview_dom = document.getElementsByClassName("files-preview")[0]
-            while ( files_preview_dom.hasChildNodes() ) {
-                files_preview_dom.removeChild(files_preview_dom.firstChild );
+            while (files_preview_dom.hasChildNodes()) {
+                files_preview_dom.removeChild(files_preview_dom.firstChild);
             }
             const postWriteContainer = writeArea.closest('.card')
             const filesPreviewContainer = postWriteContainer.querySelector('.files-preview')
             filesPreviewContainer.innerHTML = ''
             fileForm.value = ''
             writeArea.value = ''
-        }
-        else {
+        } else {
             formDataApi.POST(POST_URL, formData)
-                        .then(res => {
-                            if (res.status == 201) {
-                                return res.json();
-                            }
-                            throw res
-                        })
-                        .then(post => {
-                            posts.prepend(createPostDOM(post))
+                .then(res => {
+                    if (res.status == 201) {
+                        return res.json();
+                    }
+                    throw res
+                })
+                .then(post => {
+                    posts.prepend(createPostDOM(post))
 
-                            const postWriteContainer = writeArea.closest('.card');
-                            const filesPreviewContainer = postWriteContainer.querySelector('.files-preview');
-                            filesPreviewContainer.innerHTML = ''
-                            fileForm.value = ''
-                            writeArea.value = ''
-
-
-                        })
-                        .catch(error => {
-                            error.json().then(errorMessage =>
-                                alert(errorMessage.message))
-                        })
+                    const postWriteContainer = writeArea.closest('.card');
+                    const filesPreviewContainer = postWriteContainer.querySelector('.files-preview');
+                    filesPreviewContainer.innerHTML = ''
+                    fileForm.value = ''
+                    writeArea.value = ''
+                })
+                .catch(error => {
+                    error.json().then(errorMessage =>
+                        alert(errorMessage.message))
+                })
         }
     })
 }
@@ -163,7 +160,7 @@ const postOperateButton = (function () {
         };
 
         const PostService = function () {
-            const toggleUpdate = function (event) {
+            const toggleUpdate = (event) => {
                 const buttonContainer = event.target.closest("a")
                 if (buttonContainer == null) {
                     return
@@ -174,7 +171,7 @@ const postOperateButton = (function () {
                 }
             };
 
-            const update = function (event) {
+            const update = (event) => {
                 const buttonContainer = event.target.closest("li")
 
                 if (buttonContainer == null) {
@@ -324,7 +321,7 @@ const postOperateButton = (function () {
                         }
 
                         const totalCountContainer = postCard.querySelector('.totalComment')
-                        const totalCount = parseInt(totalCountContainer.innerHTML)+1
+                        const totalCount = parseInt(totalCountContainer.innerHTML) + 1
                         totalCountContainer.innerHTML = totalCount
 
                     })
@@ -397,7 +394,7 @@ const postOperateButton = (function () {
                             commentCard.removeChild(buttonContainer);
 
                             const totalCountContainer = postCard.querySelector('.totalComment')
-                            const totalCount = parseInt(totalCountContainer.innerHTML)-1
+                            const totalCount = parseInt(totalCountContainer.innerHTML) - 1
                             totalCountContainer.innerHTML = totalCount
                         })
                         .catch(error => console.error(error))
@@ -483,7 +480,7 @@ const fileAttach = (function () {
     }
 
     const FileAttachService = function () {
-        const showFileAttachForm = function (event) {
+        const showFileAttachForm = (event) => {
             const fileAttachContainer = event.target.closest('li');
             if (fileAttachContainer && fileAttachContainer.classList.contains('file-attach')) {
                 const fileInput = fileAttachContainer.firstElementChild;
@@ -491,7 +488,7 @@ const fileAttach = (function () {
             }
         };
 
-        const previewFileAttach = function (event) {
+        const previewFileAttach = (event) => {
             const fileAttachContainer = event.target.closest('li');
             if (fileAttachContainer && fileAttachContainer.classList.contains('file-attach')) {
                 const postWriteContainer = fileAttachContainer.closest('.card');
@@ -535,7 +532,7 @@ const fileAttach = (function () {
     }
 })();
 
-$(document).ready(function(){
+$(document).ready(function () {
     postOperateButton.init();
     fileAttach.init();
     initLoad();
