@@ -32,6 +32,7 @@ public class UserElasticSearchRepository {
     public List<UserSearchResponse> findByUserName(final String name) {
         final List<UserSearchResponse> userSearchResponses = new ArrayList<>();
 
+        // 검색용 쿼리 생성
         final BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
         boolQueryBuilder
                 .should(QueryBuilders.prefixQuery("name", name))
@@ -41,6 +42,8 @@ public class UserElasticSearchRepository {
                 .minimumShouldMatch(1);
 
         final SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().query(boolQueryBuilder).from(0).size(8);
+
+        // 쿼리를 보내 요청
         final SearchHits searchHits = elasticSearchTemplate.search(INDEX_NAME, searchSourceBuilder);
 
         for (SearchHit hit : searchHits) {

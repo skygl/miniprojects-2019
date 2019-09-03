@@ -32,6 +32,9 @@ public class InitElasticSearchIndex {
         this.objectMapper = objectMapper;
     }
 
+    /**
+     * 엘라스틱서치 초기화
+     */
     public void init() {
         final String index = UserElasticSearchRepository.INDEX_NAME;
 
@@ -42,6 +45,10 @@ public class InitElasticSearchIndex {
         bulkUserDocument(index);
     }
 
+    /**
+     * 인덱스 삭제
+     * @param index
+     */
     private void deleteIndex(final String index) {
         try {
             final boolean deleteResult = elasticSearchTemplate.deleteIndex(index);
@@ -51,6 +58,10 @@ public class InitElasticSearchIndex {
         }
     }
 
+    /**
+     * 인덱스를 생성하고 매핑해준다.
+     * @param index
+     */
     private void createIndex(final String index) {
         final CreateIndexRequest request = new CreateIndexRequest(index);
         request.source("{\n" +
@@ -157,6 +168,10 @@ public class InitElasticSearchIndex {
         log.info("createIndex : {}", createResult);
     }
 
+    /**
+     * UserRepository에서 모든 회원을 가져와서 elasticsearch에 저장해준다.
+     * @param index
+     */
     private void bulkUserDocument(final String index) {
         final List<User> users = userRepository.findAll();
         final List<IndexRequest> indexRequests = users.stream()

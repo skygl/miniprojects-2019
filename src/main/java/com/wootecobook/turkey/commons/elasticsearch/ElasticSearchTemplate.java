@@ -36,6 +36,13 @@ public class ElasticSearchTemplate {
         this.objectMapper = objectMapper;
     }
 
+    /**
+     * Document(=row) 추가 API
+     * @param source
+     * @param index
+     * @param id
+     * @return
+     */
     public DocWriteResponse.Result add(final Object source, final String index, final String id) {
         try {
             final String jsonSource = objectMapper.writeValueAsString(source);
@@ -47,6 +54,12 @@ public class ElasticSearchTemplate {
         return DocWriteResponse.Result.NOOP;
     }
 
+    /**
+     * 검색 API
+     * @param index
+     * @param searchSourceBuilder
+     * @return
+     */
     public SearchHits search(final String index, final SearchSourceBuilder searchSourceBuilder) {
         SearchHits searchHits = SearchHits.empty();
         try {
@@ -61,6 +74,11 @@ public class ElasticSearchTemplate {
         return searchHits;
     }
 
+    /**
+     * 인덱스(Database) 삭제 API
+     * @param index
+     * @return
+     */
     public boolean deleteIndex(final String index) {
         boolean result = false;
         try {
@@ -73,6 +91,11 @@ public class ElasticSearchTemplate {
         return result;
     }
 
+    /**
+     * 인덱스(Database) 생성 API
+     * @param request
+     * @return
+     */
     public boolean createIndex(final CreateIndexRequest request) {
         boolean result = false;
         try {
@@ -84,6 +107,11 @@ public class ElasticSearchTemplate {
         return result;
     }
 
+    /**
+     * 한 번의 API 호출로 여러 문서를 업데이트 (추가, 수정, 삭제)
+     * http 요청수를 줄일수 있으므로 매우 중요하다.
+     * @param indexRequests
+     */
     public void bulk(final List<IndexRequest> indexRequests) {
         try {
             final BulkRequest request = new BulkRequest();
