@@ -47,13 +47,13 @@ const carouselFileTemplate = (file) => {
     div.innerHTML = getFileTemplate(file.type, file.path)
 
     const fileHtml = div.firstElementChild
-    fileHtml.setAttribute('width', '100%')
+    fileHtml.classList.add('width-100')
 
     if (file.type.startsWith('image')) {
-        fileHtml.setAttribute('class', 'd-block w-100')
+        fileHtml.classList.add('d-block', 'w-100')
     }
     if (file.type.startsWith('video')) {
-        fileHtml.setAttribute('class', 'carousel-item-video')
+        fileHtml.classList.add('carousel-item-video')
     }
 
     return fileHtml.outerHTML;
