@@ -41,11 +41,13 @@ public class PostGoodService implements GoodService<Post> {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public int countBy(final Post post) {
         return postGoodRepository.countByPost(post);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean existsByPostAndUser(final Post post, final User user) {
         return postGoodRepository.existsByPostAndUser(post, user);
     }

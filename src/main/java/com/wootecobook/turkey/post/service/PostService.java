@@ -79,7 +79,7 @@ public class PostService {
     public Page<PostResponse> findPostResponses(final Pageable pageable, final Long userId) {
         User user = userService.findById(userId);
 
-        return postRepository.findAll(pageable)
+        return postRepository.findByUserId(pageable, userId)
                 .map(post -> {
                     GoodResponse goodResponse = GoodResponse.of(postGoodService.countBy(post),
                             postGoodService.existsByPostAndUser(post, user));

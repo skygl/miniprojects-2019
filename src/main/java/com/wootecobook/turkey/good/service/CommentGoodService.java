@@ -41,11 +41,13 @@ public class CommentGoodService implements GoodService<Comment> {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public int countBy(Comment comment) {
         return commentGoodRepository.countByComment(comment);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean existsByPostAndUser(final Comment comment, final User user) {
         return commentGoodRepository.existsByCommentAndUser(comment, user);
     }
