@@ -1,0 +1,105 @@
+.friend-tag-modal-content {
+	display: block;
+	position: relative;
+	border: 0;
+	background-color: #fff;
+	border-radius: 5px;
+	outline: 0;
+	box-shadow: 0 3px 9px rgba(0,0,0,.5);
+	flex-direction: column;
+}
+
+.friend-tag-modal-header {
+	padding: 8px 0;
+	padding-right: 24px;
+	background-color: #f5f6f7;
+	border-bottom: 1px solid #dddfe2;
+	border-radius: 2px 2px 0 0;
+	font-weight: bold;
+}
+
+.friend-tag-modal-footer {
+	display: flex;
+}
+
+.friend-not-tagged {
+	background-image: url(/images/default/icons5.png);
+	background-repeat: no-repeat;
+	background-size: 64px 2160px;
+	background-position: 0 -1516px;
+	height: 20px;
+	width: 20px;
+}
+
+.friend-tagged {
+	background-image: url(/images/default/icons5.png);
+	background-repeat: no-repeat;
+	background-size: 64px 2160px;
+	background-position: 0 -1494px;
+	height: 20px;
+	width: 20px;
+}
+
+.friends-tag-list {
+	overflow-y: scroll;
+	max-height: 300px;
+}
+
+.friends-tag-list-item {
+	display: flex;
+}
+
+table.tagged-friends-table {
+	border-top: 1px dotted #dddfe2;
+}
+
+tbody {
+	display: table-row-group;
+	vertical-align: middle;
+	border-color: inherit;
+}
+
+table.tagged-friends-table > tbody > tr {
+	display: table-row;
+	vertical-align: inherit;
+	border-color: inherit;
+}
+
+table.tagged-friends-table > tbody > tr > td {
+	vertical-align: inherit;
+	border-color: inherit;
+}
+
+._5esm {
+	background: #e2e8f6;
+	border-right: 1px dotted #dddfe2;
+	font-size: 12px;
+	line-height: 16px;
+	margin-right: 6px;
+	min-width: 29px;
+	padding: 8px 6px 6px 8px;
+	position: relative;
+	text-align: center;
+	white-space: nowrap;
+	z-index: 1;
+}
+
+._5esw {
+	background: #fff;
+	width: 100%;
+}
+
+.tagged-friends-show {
+	border-width: 0;
+	box-sizing: border-box;
+	width: 100%;
+	padding-top: 9px;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	padding: 4px;
+	position: relative;
+}
+
+.tagged-friends-input {
+	border: none;
+}

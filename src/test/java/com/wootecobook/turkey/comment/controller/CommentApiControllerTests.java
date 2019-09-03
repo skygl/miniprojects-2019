@@ -6,14 +6,12 @@ import com.wootecobook.turkey.comment.service.dto.CommentCreate;
 import com.wootecobook.turkey.comment.service.dto.CommentResponse;
 import com.wootecobook.turkey.comment.service.dto.CommentUpdate;
 import com.wootecobook.turkey.commons.ErrorMessage;
-import com.wootecobook.turkey.config.AwsMockConfig;
 import com.wootecobook.turkey.good.service.dto.GoodResponse;
 import com.wootecobook.turkey.post.service.dto.PostResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -30,7 +28,6 @@ import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration;
 
-@Import(AwsMockConfig.class)
 class CommentApiControllerTests extends BaseControllerTests {
 
     private static final String COMMENT_API_URI = "/api/posts/{postId}/comments";

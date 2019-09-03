@@ -3,6 +3,7 @@ package com.wootecobook.turkey.post.service;
 import com.wootecobook.turkey.comment.domain.CommentRepository;
 import com.wootecobook.turkey.file.domain.UploadFile;
 import com.wootecobook.turkey.file.service.UploadFileService;
+import com.wootecobook.turkey.friend.service.FriendService;
 import com.wootecobook.turkey.good.service.PostGoodService;
 import com.wootecobook.turkey.good.service.dto.GoodResponse;
 import com.wootecobook.turkey.post.domain.Contents;
@@ -10,6 +11,7 @@ import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.post.domain.PostRepository;
 import com.wootecobook.turkey.post.service.dto.PostRequest;
 import com.wootecobook.turkey.post.service.dto.PostResponse;
+import com.wootecobook.turkey.post.service.exception.NotFriendException;
 import com.wootecobook.turkey.post.service.exception.NotPostOwnerException;
 import com.wootecobook.turkey.user.domain.User;
 import com.wootecobook.turkey.user.service.UserService;
@@ -36,28 +38,45 @@ public class PostService {
     private final UserService userService;
     private final UploadFileService uploadFileService;
     private final CommentRepository commentRepository;
+    private final FriendService friendService;
 
     public PostService(final PostRepository postRepository, final PostGoodService postGoodService,
-                       final UserService userService, final UploadFileService uploadFileService, final CommentRepository commentRepository) {
+                       final UserService userService, final UploadFileService uploadFileService,
+                       final FriendService friendService, final CommentRepository commentRepository) {
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
         this.postGoodService = postGoodService;
         this.userService = userService;
         this.uploadFileService = uploadFileService;
+        this.friendService = friendService;
     }
 
     public PostResponse save(final PostRequest postRequest, final Long userId) {
         User user = userService.findById(userId);
         User receiver = findReceiverIfExist(postRequest.getReceiver());
+        List<User> taggedUsers = findTaggedUsersIfExist(postRequest.getTaggedUsers(), user);
         List<UploadFile> savedFiles = saveAttachments(postRequest.getFiles(), user);
 
-        Post savedPost = postRepository.save(postRequest.toEntity(user, receiver, savedFiles));
+        Post savedPost = postRepository.save(postRequest.toEntity(user, receiver, savedFiles, taggedUsers));
 
         return PostResponse.getPostResponse(savedPost);
     }
 
     private User findReceiverIfExist(final Long receiverId) {
         return receiverId == null ? null : userService.findById(receiverId);
+    }
+
+    private List<User> findTaggedUsersIfExist(final List<Long> taggedUsers, final User user) {
+        if (taggedUsers == null) {
+            return new ArrayList<>();
+        }
+        if (taggedUsers.stream()
+                .anyMatch(taggedUser -> !friendService.isAlreadyFriend(taggedUser, user.getId()))) {
+            throw new NotFriendException();
+        }
+        return taggedUsers.stream()
+                .map(userService::findById)
+                .collect(Collectors.toList());
     }
 
     private List<UploadFile> saveAttachments(List<MultipartFile> attachments, User owner) {

@@ -12,6 +12,9 @@ import org.springframework.stereotype.Controller;
 
 import javax.servlet.http.HttpSession;
 
+import static com.wootecobook.turkey.commons.resolver.UserSession.USER_SESSION_KEY;
+import static org.springframework.messaging.simp.stomp.StompHeaders.SESSION;
+
 @Controller
 public class WebSocketMessengerController {
 
@@ -29,8 +32,8 @@ public class WebSocketMessengerController {
     }
 
     private UserSession getLoginUser(SimpMessageHeaderAccessor messageHeaderAccessor) {
-        HttpSession httpSession = (HttpSession) messageHeaderAccessor.getSessionAttributes().get("session");
-        return (UserSession) httpSession.getAttribute("loginUser");
+        HttpSession httpSession = (HttpSession) messageHeaderAccessor.getSessionAttributes().get(SESSION);
+        return (UserSession) httpSession.getAttribute(USER_SESSION_KEY);
     }
 
 }

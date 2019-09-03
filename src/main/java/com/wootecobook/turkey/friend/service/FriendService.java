@@ -76,9 +76,13 @@ public class FriendService {
     }
 
     public void checkAlreadyFriend(final Long relatingId, final Long relatedId) {
-        if (friendRepository.findByRelatingUserIdAndRelatedUserId(relatingId, relatedId).isPresent()) {
+        if (isAlreadyFriend(relatingId, relatedId)) {
             throw new AlreadyFriendException(ALREADY_FRIEND_MESSAGE);
         }
+    }
+
+    public boolean isAlreadyFriend(Long relatingId, Long relatedId) {
+        return friendRepository.findByRelatingUserIdAndRelatedUserId(relatingId, relatedId).isPresent();
     }
 
     public void deleteByRelatedUserIdOrRelatingUserId(final Long userId) {

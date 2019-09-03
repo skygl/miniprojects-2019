@@ -47,7 +47,15 @@ const postTemplate = (post, loginUserId) => `
                             }
                             return ""
                         })()
-                    }                
+                    }    
+                    ${
+                        (() => {
+                            if (post.taggedUsers.length !== 0) {
+                                return taggedUsersFormat(post.taggedUsers)
+                            }
+                            return ""
+                        })()
+                    }                   
                     <span class="sub-title">${dateFormat(post.updatedAt, isUpdated(post.createdAt, post.updatedAt))}</span>
                     ${
                         (() => {
@@ -147,6 +155,16 @@ const postTemplate = (post, loginUserId) => `
 </div>
 `
 
+const friendTagTemplate = (friend) =>
+`
+<li class="friends-tag-list-item" data-id="${friend.relatedUserId}">
+    <div class="_740n">
+        <input type="checkbox">
+        <span>${friend.relatedUserName}</span>
+    </div>
+</li>
+`
+
 const isUpdated = (createdAt, updatedAt) => {
     const createdDate = new Date(createdAt)
     const updatedDate = new Date(updatedAt)
@@ -175,3 +193,12 @@ const receiverFormat = (receiver) => `
 <i class="ti-angle-right"></i>
 <a href="${MY_PAGE_URL(receiver.id)}" class="title no-pdd-vertical text-semibold inline-block">${receiver.name}</a> 
 `
+
+const taggedUsersFormat = (taggedUsers) => {
+    let taggedUsersPages = []
+    for(let i = 0; i < taggedUsers.length; i++) {
+        taggedUsersPages.push(`<a href="${MY_PAGE_URL(taggedUsers[i].id)}" class="title no-pdd-vertical text-semibold inline-block">${taggedUsers[i].name}</a>`)
+    }
+
+    return "  - " + taggedUsersPages.join(",") + "님과 함께"
+}

@@ -1,6 +1,6 @@
 package com.wootecobook.turkey.file.service;
 
-import com.wootecobook.turkey.commons.aws.S3Connector;
+import com.wootecobook.turkey.commons.storage.StorageConnector;
 import com.wootecobook.turkey.file.domain.FileFeature;
 import com.wootecobook.turkey.file.domain.UploadFile;
 import com.wootecobook.turkey.file.domain.UploadFileRepository;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -19,11 +18,11 @@ import java.util.stream.Collectors;
 @Transactional
 public class UploadFileService {
 
-    private final S3Connector s3Connector;
+    private final StorageConnector storageConnector;
     private final UploadFileRepository uploadFileRepository;
 
-    public UploadFileService(final S3Connector s3Connector, final UploadFileRepository fileFeatureRepository) {
-        this.s3Connector = s3Connector;
+    public UploadFileService(final StorageConnector s3Connector, final UploadFileRepository fileFeatureRepository) {
+        this.storageConnector = s3Connector;
         this.uploadFileRepository = fileFeatureRepository;
     }
 
@@ -41,12 +40,8 @@ public class UploadFileService {
     }
 
     private String getUploadPath(final MultipartFile multipartFile, final String directoryName) {
-        try {
-            String fileName = createUniqueFileName();
-            return s3Connector.upload(multipartFile, directoryName, fileName);
-        } catch (IOException e) {
-            throw new FailedSaveFileException(e.getMessage());
-        }
+        String fileName = createUniqueFileName();
+        return storageConnector.upload(multipartFile, directoryName, fileName);
     }
 
     private String createUniqueFileName() {

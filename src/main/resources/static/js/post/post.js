@@ -36,6 +36,8 @@ const initLoad = async () => {
         const fileForm = event.target.closest('ul').querySelector('input[name="filename[]"]')
         const files = fileForm.files
 
+        formData.append('taggedUsers', friendTagService.tag())
+
         const len = files.length;
         for (let i = 0; i < len; i++) {
             formData.append('files', files[i]);

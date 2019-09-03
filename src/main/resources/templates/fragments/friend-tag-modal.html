@@ -1,0 +1,36 @@
+<div class="modal fade" id="friend-tag-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="friend-tag-modal-content modal-content">
+            <div class="friend-tag-modal-header modal-header">
+                <div class="icons tag-friend"></div>
+                <span id="friend-tag-label">친구 태그하기</span>
+            </div>
+            <div class="friend-tag-modal-body modal-body">
+                <table cols="2" class="tagged-friends-table" cellpadding="0" cellspacing="0">
+                    <tbody>
+                    <tr>
+                        <td class="_5esm">함께한 친구</td>
+                        <td class="_5esw">
+                            <div class="tagged-friends-show">
+                                <input class="tagged-friends-input" type="text" placeholder="누구와 계신가요?">
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <ul class="friends-tag-list">
+                    </ul>
+                </div>
+            </div>
+            <div class="friend-tag-modal-footer modal-footer">
+                <button data-dismiss="modal" class="btn btn-default btn-block no-mrg no-border pdd-vertical-15 ng-scope" onclick="friendTagService.cancelTag()">
+                    <span class="text-uppercase">태그 취소</span>
+                </button>
+                <button data-dismiss="modal" class="btn btn-primary btn-block no-mrg no-border pdd-vertical-15 ng-scope" onclick="friendTagService.showTaggedUserNames()">
+                    <span class="text-uppercase">태그</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

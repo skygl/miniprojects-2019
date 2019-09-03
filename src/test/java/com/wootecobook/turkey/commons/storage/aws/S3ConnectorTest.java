@@ -1,38 +1,53 @@
-package com.wootecobook.turkey.commons.aws;
+package com.wootecobook.turkey.commons.storage.aws;
 
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.AnonymousAWSCredentials;
+import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.wootecobook.turkey.config.AwsMockConfig;
+import io.findify.s3mock.S3Mock;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.IOException;
 
-import static com.wootecobook.turkey.config.AwsMockConfig.S3MOCK_ENDPOINT;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@Import(AwsMockConfig.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class S3ConnectorTest {
 
-    @Autowired
     private S3Connector s3Connector;
-
-    @Autowired
     private AmazonS3 mockS3Client;
-
-    @Autowired
+    private S3Mock s3Mock;
     private String bucket;
+    private String region;
 
     private MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "mock1.png", "image/png", "test data".getBytes());
     private String dirName = "dir";
     private String fileName = "savedFileName";
+
+    @BeforeEach
+    void setUp() {
+        bucket = "woowa-turkey";
+        region = "ap-northeast-2";
+
+        s3Mock = new S3Mock.Builder().withPort(8001).withInMemoryBackend().build();
+        s3Mock.start();
+        AwsClientBuilder.EndpointConfiguration endpoint = new AwsClientBuilder.EndpointConfiguration("http://localhost:8001", region);
+        mockS3Client = AmazonS3ClientBuilder
+                .standard()
+                .withPathStyleAccessEnabled(true)
+                .withEndpointConfiguration(endpoint)
+                .withCredentials(new AWSStaticCredentialsProvider(new AnonymousAWSCredentials()))
+                .build();
+        mockS3Client.createBucket(bucket);
+        s3Connector = new S3Connector(mockS3Client, bucket);
+    }
 
     @Test
     void 파일_업로드_테스트() throws IOException {
@@ -41,7 +56,7 @@ class S3ConnectorTest {
         String key = getFileKey(dirName, fileName);
 
         // then
-        String resourceUrl = String.format("%s/%s/%s", S3MOCK_ENDPOINT, bucket, key);
+        String resourceUrl = String.format("%s/%s/%s", "http://localhost:8001", bucket, key);
         assertThat(savedUrl).isEqualTo(resourceUrl);
     }
 
@@ -61,5 +76,10 @@ class S3ConnectorTest {
 
     private String getFileKey(String dirName, String fileName) {
         return String.format("%s/%s", dirName, fileName);
+    }
+
+    @AfterEach
+    void tearDown() {
+        s3Mock.stop();
     }
 }

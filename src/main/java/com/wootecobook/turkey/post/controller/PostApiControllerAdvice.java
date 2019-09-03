@@ -1,6 +1,7 @@
 package com.wootecobook.turkey.post.controller;
 
 import com.wootecobook.turkey.commons.ErrorMessage;
+import com.wootecobook.turkey.post.service.exception.NotFriendException;
 import com.wootecobook.turkey.post.service.exception.NotPostOwnerException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -13,7 +14,7 @@ import javax.persistence.EntityNotFoundException;
 @RestControllerAdvice(basePackageClasses = {PostApiController.class})
 public class PostApiControllerAdvice {
 
-    @ExceptionHandler({EntityNotFoundException.class, NotPostOwnerException.class})
+    @ExceptionHandler({EntityNotFoundException.class, NotPostOwnerException.class, NotFriendException.class})
     protected ResponseEntity<ErrorMessage> handleException(RuntimeException exception) {
         ErrorMessage errorMessage = new ErrorMessage(exception.getMessage());
 
