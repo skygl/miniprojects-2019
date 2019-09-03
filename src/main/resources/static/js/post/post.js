@@ -45,7 +45,7 @@ const initLoad = async () => {
         }
 
         if (total_file_size > MAX_FILE_SIZE) {
-            alert("최대 파일 크기를 초과했습니다.\n현재 파일 크기 : " + total_file_size + " bytes\n최대 파일 크기 : " + MAX_FILE_SIZE + " bytes")
+            alert(`최대 파일 크기를 초과했습니다.\n현재 파일 크기 : ${total_file_size}bytes\n최대 파일 크기 : ${MAX_FILE_SIZE}bytes`)
             total_file_size = 0
             const files_preview_dom = document.getElementsByClassName("files-preview")[0]
             while (files_preview_dom.hasChildNodes()) {

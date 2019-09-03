@@ -39,7 +39,7 @@ const writeFormTemplate = (receiver) => `
 
 const getSuggestMessage = (receiver) => {
     if (receiver.id == localStorage.loginUserId) {
-        return localStorage.loginUserName + '님, 무슨 생각을 하고 계신가요?'
+        return `${localStorage.loginUserName}님, 무슨 생각을 하고 계신가요?`
     }
-    return receiver.name + '님에게 글을 남겨보세요'
+    return `${receiver.name}님에게 글을 남겨보세요`
 }
