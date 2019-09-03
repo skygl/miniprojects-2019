@@ -1,7 +1,7 @@
 const writeFormTemplate = (receiver) => `
 <div class="social-feeds">
     <div class="card widget-compose">
-        <p class="border bottom width-100 pdd-btm-5 text-bold">게시물 만들기</p>
+        <p class="border bottom width-100 pdd-btm-5 text-bold">게시물 만들기</p><p id="tagged_user_names"></p>
         <textarea data-id="${receiver.id}" id="write-area" class="resize-none form-control border bottom resize-none" placeholder="${getSuggestMessage(receiver)}"} ></textarea>
         <div class="files-preview"></div>
         <ul class="composor-tools pdd-top-15">
@@ -14,10 +14,10 @@ const writeFormTemplate = (receiver) => `
                     </div>
                 </li>
                 <li class="bg-lightgray border-radius-round mrg-right-5">
-                    <a class="pdd-vertical-5 pdd-horizon-10 pointer">
+                    <div class="pdd-vertical-5 pdd-horizon-10 pointer" id="friends-tag-btn" data-toggle="modal" data-target='#friend-tag-modal' data-keyboard="false" data-backdrop="static">
                         <div class="icons tag-friend"></div>
                         <span class="icon-name font-size-13 text-bold"> 친구 태그하기</span>
-                    </a>
+                    </div>
                 </li>
                 <li class="bg-lightgray border-radius-round mrg-right-5">
                     <a class="pdd-vertical-5 pdd-horizon-10 pointer">
