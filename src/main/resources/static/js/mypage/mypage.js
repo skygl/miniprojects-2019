@@ -60,10 +60,10 @@ const loadWriteForm = (receiver) => {
 
 const addUpdateListener = () => {
     const item_map = {
-        'company' : '회사',
-        'currentCity' : '거주지',
-        'education' : '학교',
-        'hometown' : '출신지'
+        'company': '회사',
+        'currentCity': '거주지',
+        'education': '학교',
+        'hometown': '출신지'
     }
 
     const update_btn = document.getElementById("introduction-update-btn")
@@ -71,7 +71,7 @@ const addUpdateListener = () => {
     const display_card = document.getElementById("display-card")
     const update_card = document.getElementById("update-card")
 
-    update_btn.addEventListener('click', function(event) {
+    update_btn.addEventListener('click', function (event) {
         api.GET(INTRODUCTION_URI)
             .then(res => res.json())
             .then(introduction => {
@@ -80,18 +80,18 @@ const addUpdateListener = () => {
                 document.getElementById("current-city-input").value = checkNull(introduction.currentCity)
                 document.getElementById("hometown-input").value = checkNull(introduction.hometown)
                 document.getElementById("company-input").value = checkNull(introduction.company)
-                display_card.style.display="none"
-                update_card.style.display="block"
-                update_btn.style.display="none"
-                display_btn.style.display="block"
+                display_card.style.display = "none"
+                update_card.style.display = "block"
+                update_btn.style.display = "none"
+                display_btn.style.display = "block"
             })
     })
-    display_btn.addEventListener('click', function() {
+    display_btn.addEventListener('click', function () {
         const updateIntroductionRequest = serializeObject($('#up'))
         api.PUT(INTRODUCTION_URI, updateIntroductionRequest)
-            .then(res=>res.json())
+            .then(res => res.json())
             .then(introduction => {
-                for(let key in item_map) {
+                for (let key in item_map) {
                     if (introduction[key] == null || introduction[key] == "") {
                         introduction[key] = item_map[key] + '를 입력해주세요.'
                     }
@@ -100,10 +100,10 @@ const addUpdateListener = () => {
                 document.getElementById("current-city-card").innerHTML = checkNull(introduction.currentCity)
                 document.getElementById("hometown-card").innerHTML = checkNull(introduction.hometown)
                 document.getElementById("company-card").innerHTML = checkNull(introduction.company)
-                display_card.style.display="block"
-                update_card.style.display="none"
-                update_btn.style.display="block"
-                display_btn.style.display="none"
+                display_card.style.display = "block"
+                update_card.style.display = "none"
+                update_btn.style.display = "block"
+                display_btn.style.display = "none"
             })
     })
 }
