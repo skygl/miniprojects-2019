@@ -1,4 +1,4 @@
-package com.wootecobook.turkey.commons.aws;
+package com.wootecobook.turkey.commons.storage.aws;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;

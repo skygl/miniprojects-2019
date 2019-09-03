@@ -2,8 +2,8 @@ package com.wootecobook.turkey.user.service;
 
 import com.wootecobook.turkey.file.domain.UploadFile;
 
-import static com.wootecobook.turkey.commons.aws.S3Connector.COVER_SAVE_DIRECTORY;
-import static com.wootecobook.turkey.commons.aws.S3Connector.PROFILE_SAVE_DIRECTORY;
+import static com.wootecobook.turkey.commons.storage.aws.S3Connector.COVER_SAVE_DIRECTORY;
+import static com.wootecobook.turkey.commons.storage.aws.S3Connector.PROFILE_SAVE_DIRECTORY;
 
 public enum ImageType {
 

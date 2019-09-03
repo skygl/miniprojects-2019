@@ -1,8 +1,9 @@
-package com.wootecobook.turkey.commons.aws;
+package com.wootecobook.turkey.commons.storage.aws;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.wootecobook.turkey.commons.storage.StorageConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 @Component
-public class S3Connector {
+public class S3Connector implements StorageConnector {
 
     public static final String PROFILE_SAVE_DIRECTORY = "profile";
     public static final String COVER_SAVE_DIRECTORY = "cover";
@@ -28,11 +29,15 @@ public class S3Connector {
     }
 
     //directoryName을 따로 받지 않고 fileName과 합쳐서 외부에서 전달하기
-    public String upload(final MultipartFile multipartFile, final String directoryName, final String fileName) throws IOException {
-        File uploadFile = convert(multipartFile, fileName);
-        String filePath = joinDirectoryAndFileName(directoryName, fileName);
+    public String upload(final MultipartFile multipartFile, final String directoryName, final String fileName) {
+        try {
+            File uploadFile = convert(multipartFile, fileName);
+            String filePath = joinDirectoryAndFileName(directoryName, fileName);
 
-        return upload(uploadFile, filePath);
+            return upload(uploadFile, filePath);
+        } catch (IOException e) {
+            throw new FailedUploadException(e.getMessage());
+        }
     }
 
     private File convert(final MultipartFile multipartFile, final String fileName) throws IOException {
