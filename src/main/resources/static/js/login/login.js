@@ -1,8 +1,8 @@
 function login() {
-    const enter = 13;
-    const click = 1;
+    const ENTER_KEY = 13;
+    const CLICK = 1;
 
-    if(!(event.keyCode === enter || event.which === click)) return
+    if(!(event.keyCode === ENTER_KEY || event.which === CLICK)) return
 
     const loginRequest = serializeObject($("#login_form"))
 

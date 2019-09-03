@@ -31,8 +31,8 @@ const searchbox = function (event) {
 
 const searchEnter = function (event) {
     const keyword = changeSlash(event.target.value)
-    const enter = 13;
-    if (event.keyCode !== enter) return
+    const ENTER_KEY = 13;
+    if (event.keyCode !== ENTER_KEY) return
 
     location.href = `/search?keyword=${keyword}`
 
