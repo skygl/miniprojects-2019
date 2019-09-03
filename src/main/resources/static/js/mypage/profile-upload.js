@@ -14,8 +14,9 @@ const coverUploadBtn = document.querySelector('#cover-modal .modal-body button')
 
 
 const closeModal = (modalBackground) => {
-    profileModal.style.display = 'none'
-    coverModal.style.display = 'none'
+    profileModal.classList.remove('display-block')
+    coverModal.classList.remove('display-block')
+
     modalBackground.remove()
 }
 
@@ -72,7 +73,7 @@ const showModal = (modal) => {
         return false;
     }
 
-    modal.style.display = 'block'
+    modal.classList.add('display-block')
     const modalFade = wrapperTemplate('<div class="modal-backdrop fade show"></div>')
     document.body.append(modalFade)
 }
