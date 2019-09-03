@@ -7,27 +7,27 @@ const logoutMarkTemplate = `
 `
 
 const allUserTemplate = (user) =>
-`
+    `
 <div class="btn-group dropleft data-id" data-id="${user.id}">
     <button type="button" class="list-group-item list-group-item-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <img class="img-circle width-25px" src=
         ${
-            (() => {
-                return (user.profile === undefined) || (user.profile === null) ?
-                  DEFAULT_PROFILE_IMAGE_URL : user.profile.path
-            })()
+        (() => {
+            return (user.profile === undefined) || (user.profile === null) ?
+                DEFAULT_PROFILE_IMAGE_URL : user.profile.path
+        })()
         }
         >
 
         ${user.name}
         ${
-            (() => {
-                if (user.login) {
-                    return loginMarkTemplate
-                } else {
-                    return logoutMarkTemplate
-                }
-            })()
+        (() => {
+            if (user.login) {
+                return loginMarkTemplate
+            } else {
+                return logoutMarkTemplate
+            }
+        })()
         }
     </button>
     <div class="dropdown-menu dropdown-menu-left">
@@ -44,26 +44,15 @@ const allUserTemplate = (user) =>
 `
 
 const friendTemplate = (friend) =>
-`
+    `
 <div class="btn-group dropleft data-id" data-id="${friend.friendId}">
     <button type="button" class="list-group-item list-group-item-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <img class="img-circle width-25px" src=
-        ${
-            (() => {
-                return (friend.profile === undefined) || (friend.profile === null) ?
-                  DEFAULT_PROFILE_IMAGE_URL : friend.profile.path
-            })()
-        }
-        >
+        <img class="img-circle width-25px" src=${getProfileSrc(friend.profile)}>
         ${friend.relatedUserName}
         ${
-            (() => {
-                if (friend.login) {
-                    return loginMarkTemplate
-                } else {
-                    return logoutMarkTemplate
-                }
-            })()
+            (() => 
+                friend.login ? loginMarkTemplate : logoutMarkTemplate
+            )()
         }
     </button>
     <div class="dropdown-menu dropdown-menu-left">

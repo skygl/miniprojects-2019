@@ -17,5 +17,10 @@ const setupNavBarUserProfile = () => {
     currentUserProfile.setAttribute('src', imageUrl)
 }
 
+const getProfileSrc = (profile) => {
+    return (profile === undefined) || (profile === null) ?
+        DEFAULT_PROFILE_IMAGE_URL : profile.path
+}
+
 setupNavBarUserName()
 setupNavBarUserProfile()

@@ -30,40 +30,21 @@ const postTemplate = (post, loginUserId) => `
     <div class="feed-header">
         <ul class="list-unstyled list-info">
             <li>
-                <img class="thumb-img img-circle" src=
-                 ${
-                     (() => {
-                         return (post.author.profile === undefined) || (post.author.profile === null) ?
-                            DEFAULT_PROFILE_IMAGE_URL : post.author.profile.path
-                     })()
-                 }
-                 alt="">
+                <img class="thumb-img img-circle" src=${getProfileSrc(post.author.profile)} alt="">
                 <div class="info">
                     <a href="${MY_PAGE_URL(post.author.id)}" class="title no-pdd-vertical text-semibold inline-block">${post.author.name}</a>
                     ${
-                        (() => {
-                            if (post.receiver !== null) {
-                                return receiverFormat(post.receiver)
-                            }
-                            return ""
-                        })()
+                        (() => (post.receiver !== null) ? receiverFormat(post.receiver) : ""
+                        )()
                     }    
                     ${
-                        (() => {
-                            if (post.taggedUsers.length !== 0) {
-                                return taggedUsersFormat(post.taggedUsers)
-                            }
-                            return ""
-                        })()
+                        (() => (post.taggedUsers.length !== 0) ? taggedUsersFormat(post.taggedUsers) : ""
+                        )()
                     }                   
                     <span class="sub-title">${dateFormat(post.updatedAt, isUpdated(post.createdAt, post.updatedAt))}</span>
                     ${
-                        (() => {
-                            if (post.author.id == loginUserId) {
-                                return postEditDeleteDropdown
-                            }
-                            return ""
-                        })()
+                        (() => (post.author.id == loginUserId) ? postEditDeleteDropdown : ""
+                        )()
                     }
                 </div>
             </li>
