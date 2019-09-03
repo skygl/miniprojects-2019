@@ -9,8 +9,8 @@ let currentPageNumber = 1;
 const MAX_FILE_SIZE = 100 * 1024 * 1024
 let total_file_size = 0
 
-const initLoad = async () => {
-    await api.GET(POST_URL)
+const initLoad = async (url) => {
+    await api.GET(url)
         .then(res => res.json())
         .then(postPage => {
             totalPage = postPage.totalPages;
@@ -535,5 +535,10 @@ const fileAttach = (function () {
 $(document).ready(function () {
     postOperateButton.init();
     fileAttach.init();
-    initLoad();
+    console.log(location.pathname)
+    if (location.pathname === "/") {
+        initLoad(POST_URL);
+    } else {
+        initLoad(MYPAGE_POST_URI)
+    }
 })

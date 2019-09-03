@@ -1,4 +1,7 @@
+const locationArray = location.pathname.split("/");
+
 const MYPAGE_URI = `/api${location.pathname}/mypage`
+const MYPAGE_POST_URI = `/api/posts/${locationArray[locationArray.length - 1]}/mypage`
 const INTRODUCTION_URI = `/api${location.pathname}/introduction`
 const DEFAULT_PERSON_IMAGE_URL = (number) => `/images/default/person${number}.jpg`
 const DEFAULT_COVER_IMAGE_URL = '/images/default/chelsea.png'
@@ -45,6 +48,7 @@ const feedInitLoad = async () => {
                     }
                 } else {
                     template = feedTemplates[type](user)
+                    block.appendChild(wrapperTemplate(template))
                 }
             })
         })

@@ -33,7 +33,7 @@ const feedTemplatesCreator = () => {
         },
         pictures: (user) => `
             <div class="card-images">
-                ${user.images.length === 0 ? imageTemplate(DEFAULT_PERSON_IMAGE_URL(generateRandomNumber(4))) : multipleImageParser(user.images)}
+                ${user.images.length === 0 ? '' : multipleImageParser(user.images)}
             </div>
         `,
         friends: (user) => {
@@ -51,6 +51,7 @@ const feedTemplatesCreator = () => {
     `
     const multipleImageParser = (images) => images.map(image => imageTemplate(
         image === null ? DEFAULT_PERSON_IMAGE_URL(generateRandomNumber(4)) : image.path)).join('')
+
     return templates
 }
 

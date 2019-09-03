@@ -39,6 +39,12 @@ public class PostApiController {
         return ResponseEntity.ok(postResponses);
     }
 
+    @GetMapping("/{id}/mypage")
+    public ResponseEntity<Page<PostResponse>> myPageList(@PathVariable Long id, @PageableDefault(sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<PostResponse> postResponses = postService.findPostResponses(pageable, id);
+        return ResponseEntity.ok(postResponses);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<PostResponse> update(@PathVariable Long id,
                                                @RequestBody @Valid PostRequest postRequest,
