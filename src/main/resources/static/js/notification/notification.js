@@ -26,6 +26,15 @@ const firebaseModule = (function () {
                         })
                         .then(async function(token) {
                             await fetch('/register', { method: 'post', body: token })
+                            messaging.onMessage(payload => {
+                                const title = payload.notification.title
+                                const options = {
+                                    body : payload.notification.body
+                                }
+                                navigator.serviceWorker.ready.then(registration => {
+                                    registration.showNotification(title, options);
+                                })
+                            })
                         })
                         .catch(function(err) {
                             console.log("Error Occured");
