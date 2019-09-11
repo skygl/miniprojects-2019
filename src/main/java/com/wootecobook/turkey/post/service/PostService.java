@@ -6,6 +6,9 @@ import com.wootecobook.turkey.file.service.UploadFileService;
 import com.wootecobook.turkey.friend.service.FriendService;
 import com.wootecobook.turkey.good.service.PostGoodService;
 import com.wootecobook.turkey.good.service.dto.GoodResponse;
+import com.wootecobook.turkey.notification.NotificationType;
+import com.wootecobook.turkey.notification.service.NotificationService;
+import com.wootecobook.turkey.notification.service.dto.NotificationRequest;
 import com.wootecobook.turkey.post.domain.Contents;
 import com.wootecobook.turkey.post.domain.Post;
 import com.wootecobook.turkey.post.domain.PostRepository;
@@ -39,16 +42,19 @@ public class PostService {
     private final UploadFileService uploadFileService;
     private final CommentRepository commentRepository;
     private final FriendService friendService;
+    private final NotificationService notificationService;
 
     public PostService(final PostRepository postRepository, final PostGoodService postGoodService,
                        final UserService userService, final UploadFileService uploadFileService,
-                       final FriendService friendService, final CommentRepository commentRepository) {
+                       final FriendService friendService, final CommentRepository commentRepository,
+                       final NotificationService notificationService) {
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
         this.postGoodService = postGoodService;
         this.userService = userService;
         this.uploadFileService = uploadFileService;
         this.friendService = friendService;
+        this.notificationService = notificationService;
     }
 
     public PostResponse save(final PostRequest postRequest, final Long userId) {
@@ -58,8 +64,42 @@ public class PostService {
         List<UploadFile> savedFiles = saveAttachments(postRequest.getFiles(), user);
 
         Post savedPost = postRepository.save(postRequest.toEntity(user, receiver, savedFiles, taggedUsers));
+        createNotification(savedPost);
 
         return PostResponse.getPostResponse(savedPost);
+    }
+
+    private void createNotification(Post savedPost) {
+        if (savedPost.getReceiver().isPresent()) {
+            createReceiveNotification(savedPost.getAuthor(), savedPost.getReceiver().get());
+        }
+        if (!savedPost.getTaggedUsers().isEmpty()) {
+            createTaggedNotification(savedPost.getAuthor(), savedPost.getTaggedUsers());
+        }
+    }
+
+    private void createReceiveNotification(User sender, User receiver) {
+        if (receiver.isLogin()) {
+            NotificationRequest notificationRequest = NotificationRequest.builder()
+                    .title("POST RECEIVED")
+                    .token(notificationService.getToken(receiver.getId()))
+                    .message(NotificationType.POST_RECEIVED.generateNotificationMessage(sender, receiver))
+                    .build();
+            notificationService.sendNotification(notificationRequest);
+        }
+    }
+
+    private void createTaggedNotification(User sender, List<User> receivers) {
+        receivers.stream()
+                .filter(User::isLogin)
+                .forEach(receiver -> {
+                    NotificationRequest notificationRequest = NotificationRequest.builder()
+                            .title("POST TAGGED")
+                            .token(notificationService.getToken(receiver.getId()))
+                            .message(NotificationType.POST_TAGGED.generateNotificationMessage(sender, receiver))
+                            .build();
+                    notificationService.sendNotification(notificationRequest);
+                });
     }
 
     private User findReceiverIfExist(final Long receiverId) {

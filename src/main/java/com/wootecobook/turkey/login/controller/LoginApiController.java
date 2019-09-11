@@ -4,6 +4,7 @@ import com.wootecobook.turkey.commons.resolver.LoginUser;
 import com.wootecobook.turkey.commons.resolver.UserSession;
 import com.wootecobook.turkey.login.service.LoginService;
 import com.wootecobook.turkey.login.service.dto.LoginRequest;
+import com.wootecobook.turkey.notification.service.NotificationService;
 import com.wootecobook.turkey.user.service.UserService;
 import com.wootecobook.turkey.user.service.dto.UserResponse;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +21,13 @@ public class LoginApiController {
 
     private final LoginService loginService;
     private final UserService userService;
+    private final NotificationService notificationService;
 
-    public LoginApiController(final LoginService loginService, final UserService userService) {
+    public LoginApiController(final LoginService loginService, final UserService userService,
+                              final NotificationService notificationService) {
         this.loginService = loginService;
         this.userService = userService;
+        this.notificationService = notificationService;
     }
 
     @PostMapping("/login")
@@ -36,6 +40,7 @@ public class LoginApiController {
     @PostMapping("/logout")
     public ResponseEntity logout(@LoginUser UserSession userSession, HttpSession httpSession) {
         loginService.logout(userSession.getId());
+        notificationService.deleteToken(userSession.getId());
         httpSession.removeAttribute(USER_SESSION_KEY);
         return ResponseEntity.ok().build();
     }
