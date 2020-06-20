@@ -156,7 +156,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
-                .consumeWith(document("/user/400/create/email",
+                .consumeWith(document("user/400/create/email",
                         userRequestFieldsSnippet,
                         badRequestSnippets
                 ))
@@ -212,7 +212,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
-                .consumeWith(document("/user/400/create/password",
+                .consumeWith(document("user/400/create/password",
                         userRequestFieldsSnippet,
                         badRequestSnippets
                 ))
@@ -242,7 +242,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
-                .consumeWith(document("/user/400/create/name",
+                .consumeWith(document("user/400/create/name",
                         userRequestFieldsSnippet,
                         badRequestSnippets
                 ))
@@ -272,7 +272,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .expectStatus().isBadRequest()
                 .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(ErrorMessage.class)
-                .consumeWith(document("/user/400/create/password",
+                .consumeWith(document("user/400/create/password",
                         userRequestFieldsSnippet,
                         badRequestSnippets
                 ))
@@ -299,7 +299,7 @@ class UserApiControllerTests extends BaseControllerTests {
                 .expectStatus().isOk()
                 .expectHeader().contentType(MEDIA_TYPE)
                 .expectBody(UserResponse.class)
-                .consumeWith(document("/user/200/read",
+                .consumeWith(document("user/200/read",
                         pathParameters(
                                 parameterWithName("id").description("유저의 고유 식별자")
                         ),
