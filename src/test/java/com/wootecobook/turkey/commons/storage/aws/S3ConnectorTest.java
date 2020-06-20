@@ -12,8 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
 
-import java.io.IOException;
-
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -36,9 +34,9 @@ class S3ConnectorTest {
         bucket = "woowa-turkey";
         region = "ap-northeast-2";
 
-        s3Mock = new S3Mock.Builder().withPort(8001).withInMemoryBackend().build();
+        s3Mock = new S3Mock.Builder().withPort(8002).withInMemoryBackend().build();
         s3Mock.start();
-        AwsClientBuilder.EndpointConfiguration endpoint = new AwsClientBuilder.EndpointConfiguration("http://localhost:8001", region);
+        AwsClientBuilder.EndpointConfiguration endpoint = new AwsClientBuilder.EndpointConfiguration("http://localhost:8002", region);
         mockS3Client = AmazonS3ClientBuilder
                 .standard()
                 .withPathStyleAccessEnabled(true)
@@ -50,18 +48,18 @@ class S3ConnectorTest {
     }
 
     @Test
-    void 파일_업로드_테스트() throws IOException {
+    void 파일_업로드_테스트() {
         //when
         String savedUrl = s3Connector.upload(mockMultipartFile, dirName, fileName);
         String key = getFileKey(dirName, fileName);
 
         // then
-        String resourceUrl = String.format("%s/%s/%s", "http://localhost:8001", bucket, key);
+        String resourceUrl = String.format("%s/%s/%s", "http://localhost:8002", bucket, key);
         assertThat(savedUrl).isEqualTo(resourceUrl);
     }
 
     @Test
-    void 파일_삭제_테스트() throws IOException {
+    void 파일_삭제_테스트() {
         //given
         s3Connector.upload(mockMultipartFile, dirName, fileName);
         String key = getFileKey(dirName, fileName);//
@@ -80,6 +78,6 @@ class S3ConnectorTest {
 
     @AfterEach
     void tearDown() {
-        s3Mock.stop();
+        s3Mock.shutdown();
     }
 }
