@@ -41,7 +41,7 @@ class UploadFileServiceTest {
 
     @BeforeEach
     void setup() {
-        bucket = "woowa-turkey";
+        bucket = "turkeybook";
         region = "ap-northeast-2";
 
         s3Mock = new S3Mock.Builder().withPort(8001).withInMemoryBackend().build();
@@ -81,6 +81,6 @@ class UploadFileServiceTest {
 
     @AfterEach
     void tearDown() {
-        s3Mock.stop();
+        s3Mock.shutdown();
     }
 }

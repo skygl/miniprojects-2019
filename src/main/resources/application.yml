@@ -9,7 +9,7 @@ cloud:
     stack:
       auto: false
     s3:
-      bucket: woowa-turkey
+      bucket: turkeybook
     region:
       static: ap-northeast-2
 
